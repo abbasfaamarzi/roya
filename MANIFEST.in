@@ -1,0 +1,8 @@
+include README.md LICENSE CHANGELOG.md CONTRIBUTING.md CODE_OF_CONDUCT.md
+include pyproject.toml MANIFEST.in
+recursive-include templates *.html
+recursive-include static *
+recursive-include tests *.py
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * *.swp
