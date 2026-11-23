@@ -48,3 +48,29 @@ htmlcov/
 .DS_Store
 Thumbs.db
 desktop.ini
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+_build_/
+
+# Virtualenvs
+venv/
+.venv/
+env/
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Django local
+db.sqlite3
+*.log
