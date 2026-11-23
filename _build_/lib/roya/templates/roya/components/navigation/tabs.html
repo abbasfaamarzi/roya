@@ -1,0 +1,12 @@
+<div id="{{ component.id }}"
+     class="roya-tabs roya-tabs--{{ variant }} roya-tabs--{{ orientation }} roya-component"
+     role="tablist"
+     data-roya-component="tabs">
+  {% for item in items %}
+    <button class="roya-tab{% if forloop.counter0 == active_tab %} roya-tab--active{% endif %}"
+            role="tab"
+            data-index="{{ forloop.counter0 }}">
+      {{ item.label }}
+    </button>
+  {% endfor %}
+</div>

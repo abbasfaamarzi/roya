@@ -1,0 +1,7 @@
+<div id="{{ component.id }}"
+     class="roya-box roya-component"
+     data-direction="{{ flex_direction }}"
+     data-roya-component="box_layout"
+     style="justify-content: {{ justify }}; align-items: {{ align }}; gap: var(--roya-space-{{ gap }});">
+  {% for child in children %}{{ child.render }}{% endfor %}
+</div>

@@ -1,0 +1,7 @@
+<img id="{{ component.id }}"
+     src="{{ src }}" alt="{{ alt }}"
+     class="roya-image roya-component"
+     style="width: {{ width }}; height: {{ height }}; object-fit: {{ object_fit }}; object-position: {{ object_position }}; border-radius: var(--roya-radius-{{ radius }});"
+     {% if lazy %}loading="lazy"{% endif %}
+     decoding="{{ decoding }}"
+     data-roya-component="image" />

@@ -1,0 +1,12 @@
+<div id="{{ component.id }}"
+     class="roya-dialog roya-component"
+     {% if not open %}hidden{% endif %}
+     role="dialog" aria-modal="true"
+     data-roya-component="dialog">
+  <div class="roya-dialog__backdrop"></div>
+  <div class="roya-dialog__panel" style="max-width: {{ max_width }};">
+    {% if title %}<h2 class="roya-dialog__title">{{ title }}</h2>{% endif %}
+    {% if message %}<div class="roya-dialog__message">{{ message }}</div>{% endif %}
+    <div class="roya-dialog__content">{% for child in children %}{{ child.render }}{% endfor %}</div>
+  </div>
+</div>

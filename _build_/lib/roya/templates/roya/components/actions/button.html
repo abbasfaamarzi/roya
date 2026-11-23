@@ -1,0 +1,13 @@
+<button
+  id="{{ component.id }}"
+  class="{{ classes }} roya-component roya-focusable"
+  type="{{ type }}"
+  {% if disabled %}disabled{% endif %}
+  {% if aria_label %}aria-label="{{ aria_label }}"{% endif %}
+  data-roya-component="button"
+  data-variant="{{ variant }}"
+>
+  {% if loading %}<span class="roya-spinner"></span>{% endif %}
+  {% if icon %}<span class="roya-icon roya-icon--{{ icon_position }}">{{ icon }}</span>{% endif %}
+  {% if not icon_only %}<span class="roya-button__label">{{ label }}</span>{% endif %}
+</button>
