@@ -1,0 +1,4 @@
+<div id="{{ component.id }}" class="roya-adaptive roya-component" data-roya-component="adaptive_container"
+  data-mobile-layout="{{ mobile_layout }}" data-tablet-layout="{{ tablet_layout }}" data-desktop-layout="{{ desktop_layout }}">
+  {% for child in children %}{{ child.render }}{% endfor %}
+</div>

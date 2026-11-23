@@ -1,0 +1,7 @@
+<div id="{{ component.id }}" class="roya-progress{% if indeterminate %} roya-progress--indeterminate{% endif %} roya-component"
+  data-roya-component="progress" role="progressbar" aria-valuemin="{{ min }}" aria-valuemax="{{ max }}"
+  {% if not indeterminate %}aria-valuenow="{{ value }}"{% endif %}
+  style="--roya-progress-thickness:{{ thickness }};--roya-progress:{% widthratio value max 100 %}%">
+  <div class="roya-progress__track"><div class="roya-progress__value"></div></div>
+  {% if not indeterminate %}<span class="roya-progress__label">{{ value }}%</span>{% endif %}
+</div>

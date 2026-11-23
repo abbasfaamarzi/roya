@@ -1,0 +1,11 @@
+<fieldset id="{{ component.id }}" class="roya-component" data-roya-component="radio_group" style="border:0;padding:0;margin:0">
+  <div class="roya-radio-group roya-radio-group--{{ direction }}">
+  {% for option in options %}
+    <label class="roya-radio">
+      <input type="radio" name="{{ field_name|default:component.id }}" value="{% if option.value %}{{ option.value }}{% else %}{{ option }}{% endif %}"
+        {% if option.value == value or option == value %}checked{% endif %} {% if disabled %}disabled{% endif %}>
+      <span>{% if option.label %}{{ option.label }}{% else %}{{ option }}{% endif %}</span>
+    </label>
+  {% endfor %}
+  </div>
+</fieldset>

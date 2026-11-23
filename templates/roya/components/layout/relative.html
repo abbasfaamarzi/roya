@@ -1,0 +1,4 @@
+<div id="{{ component.id }}" class="roya-relative roya-component" data-roya-component="relative_container"
+  style="top:{{ top }};right:{{ right }};bottom:{{ bottom }};left:{{ left }};z-index:{{ z_index }}">
+  {% for child in children %}{{ child.render }}{% endfor %}
+</div>

@@ -1,0 +1,49 @@
+{% load roya %}{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'roya/css/roya.css' %}">
+    <title>Roya Component Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roya Component Demo</title>
+    {% roya_head %}
+</head>
+<body>
+    <h1>Roya Component Demo</h1>
+
+    <section>
+        <h2>Buttons</h2>
+        {% roya_component "button" label="Filled" variant="filled" %}
+        {% roya_component "button" label="Tonal" variant="tonal" %}
+        {% roya_component "button" label="Outlined" variant="outlined" %}
+        {% roya_component "button" label="Text" variant="text" %}
+    </section>
+
+    <section>
+        <h2>Text Field</h2>
+        {% roya_component "text_field" label="Name" placeholder="Enter your name" %}
+    </section>
+
+    <section>
+        <h2>Card</h2>
+        {% roya_component "card" title="Hello" content="This is a Roya card." %}
+    </section>
+
+    <section>
+        <h2>Date Picker</h2>
+        {% roya_component "date_picker" label="Select a date" %}
+    </section>
+
+    <section>
+        <h2>Time Picker</h2>
+        {% roya_component "time_picker" label="Select a time" %}
+    </section>
+
+    <section>
+        <h2>Navigation Bar</h2>
+        {% roya_component "navigation_bar" %}
+    </section>
+</body>
+    <script src="{% static 'roya/js/roya.js' %}"></script>
+</html>

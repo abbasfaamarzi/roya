@@ -1,0 +1,4 @@
+<div id="{{ component.id }}" class="roya-float roya-component" data-roya-component="float_container">
+  {% for child in children %}{{ child.render }}{% endfor %}
+  <span aria-hidden="true" style="position:absolute;{{ anchor_y }}:{{ inset }};{{ anchor_x }}:{{ inset }}"></span>
+</div>

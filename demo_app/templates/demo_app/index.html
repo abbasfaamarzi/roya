@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roya Demo</title>
+</head>
+<body>
+    <h1>Roya Components Demo</h1>
+
+    {% load roya %}
+
+    <section>
+        <h2>Button</h2>
+        {% roya_component "button" label="Click Me" variant="filled" %}
+    </section>
+
+    <section>
+        <h2>Text Field</h2>
+        {% roya_component "text_field" label="Your Name" placeholder="Enter your name" %}
+    </section>
+
+    <section>
+        <h2>Date Picker</h2>
+        {% roya_component "date_picker" label="Select a date" %}
+    </section>
+</body>
+</html>

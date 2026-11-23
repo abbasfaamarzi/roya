@@ -1,0 +1,10 @@
+<span id="{{ component.id }}" class="roya-tooltip roya-component"
+  data-roya-component="tooltip" data-trigger="{{ trigger }}">
+  <button type="button" class="roya-tooltip__trigger" data-roya-tooltip-trigger
+    aria-describedby="{{ component.id }}-bubble" {% if disabled %}disabled{% endif %}>
+    {% if children %}{% for child in children %}{{ child.render }}{% endfor %}{% else %}{{ title|default:"راهنما" }}{% endif %}
+  </button>
+  <span id="{{ component.id }}-bubble" class="roya-tooltip__bubble" role="tooltip">
+    {% if title %}<strong>{{ title }}</strong>{% endif %} {{ text }}
+  </span>
+</span>

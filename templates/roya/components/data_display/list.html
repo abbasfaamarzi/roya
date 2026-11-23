@@ -1,0 +1,12 @@
+<ul id="{{ component.id }}" class="roya-list roya-component" data-roya-component="list"
+  data-selectable="{{ selectable|yesno:'true,false' }}" data-selection-mode="{{ selection_mode }}">
+  {% for item in items %}
+  <li class="roya-list__item{% if item.value in selected_items or item.label in selected_items or item in selected_items %} is-selected{% endif %}"
+      data-roya-list-item data-value="{% if item.value %}{{ item.value }}{% elif item.label %}{{ item.label }}{% else %}{{ item }}{% endif %}"
+      {% if interactive %}tabindex="0"{% endif %} {% if selectable %}aria-selected="{% if item.value in selected_items %}true{% else %}false{% endif %}"{% endif %}>
+    {% if item.icon %}<span aria-hidden="true">{{ item.icon }}</span>{% endif %}
+    <span>{% if item.label %}{{ item.label }}{% elif item.title %}{{ item.title }}{% else %}{{ item }}{% endif %}</span>
+    {% if item.description %}<small>{{ item.description }}</small>{% endif %}
+  </li>
+  {% endfor %}
+</ul>
