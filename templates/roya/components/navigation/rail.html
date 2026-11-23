@@ -1,9 +1,0 @@
-<nav id="{{ component.id }}" class="roya-nav-rail roya-component" data-roya-component="navigation_rail" aria-label="ناوبری">
-  {% for item in items %}
-  <button type="button" class="roya-nav-item{% if item.value == selected_item or item.label == selected_item %} is-active{% endif %}"
-    data-roya-nav-item data-value="{% if item.value %}{{ item.value }}{% elif item.label %}{{ item.label }}{% else %}{{ item }}{% endif %}">
-    <span class="roya-nav-item__icon" aria-hidden="true">{% if item.icon %}{{ item.icon }}{% else %}●{% endif %}</span>
-    <span class="roya-nav-item__label">{% if item.label %}{{ item.label }}{% else %}{{ item }}{% endif %}</span>
-  </button>
-  {% endfor %}
-</nav>

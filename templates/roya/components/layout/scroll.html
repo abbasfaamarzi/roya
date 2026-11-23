@@ -1,4 +1,0 @@
-<div id="{{ component.id }}" class="roya-scroll roya-scroll--{{ direction }} roya-component" data-roya-component="scroll_container"
-  style="{% if max_scroll %}max-height:{{ max_scroll }}px;{% endif %}{% if not scrollbar %}scrollbar-width:none;{% endif %}overscroll-behavior:{{ overscroll }};scroll-behavior:{% if smooth %}smooth{% else %}auto{% endif %}">
-  {% for child in children %}{{ child.render }}{% endfor %}
-</div>

@@ -1,9 +1,0 @@
-{% if visible %}
-  {% if value or dot %}
-  <span id="{{ component.id }}" class="roya-badge roya-badge--{{ size }} roya-badge--{{ color }} roya-component"
-    {% if bg_color %}style="background-color:{{ bg_color }};"{% endif %}
-    data-roya-component="badge" {% if dot %}aria-label="اعلان جدید"{% endif %}>
-    {% if not dot %}{% if value|add:"0" > max_value %}{{ max_value }}+{% elif value == "0" and not show_zero %}{% else %}{{ value }}{% endif %}{% endif %}
-  </span>
-  {% endif %}
-{% endif %}

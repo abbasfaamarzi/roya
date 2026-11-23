@@ -1,8 +1,0 @@
-<span id="{{ component.id }}"
-      class="roya-chip roya-chip--{{ variant }} roya-component{% if selected %} is-selected{% endif %}"
-      data-roya-component="chip" data-clickable="{{ clickable|yesno:'true,false' }}"
-      {% if clickable %}tabindex="0" role="button" aria-pressed="{{ selected|yesno:'true,false' }}"{% endif %}>
-  {% if leading_icon %}<span class="roya-chip__leading" aria-hidden="true">{{ leading_icon }}</span>{% endif %}
-  <span class="roya-chip__label">{{ label }}</span>
-  {% if trailing_icon %}<span class="roya-chip__trailing" aria-hidden="true">{{ trailing_icon }}</span>{% endif %}
-</span>

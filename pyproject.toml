@@ -1,90 +1,29 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=61", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "roya"
 version = "0.2.0"
-description = "Roya — Material Design 3 component library for Django"
+description = "Material Design 3 component library for Django"
 readme = "README.md"
-license = {text = "MIT"}
 requires-python = ">=3.9"
-authors = [
-    {name = "Abbas Faamarzi", email = "abbasfaamarzi@users.noreply.github.com"},
-]
-keywords = ["django", "material-design", "components", "ui", "md3", "design-system"]
-classifiers = [
-    "Development Status :: 3 - Alpha",
-    "Environment :: Web Environment",
-    "Framework :: Django",
-    "Framework :: Django :: 4.2",
-    "Framework :: Django :: 5.0",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
-    "Operating System :: OS Independent",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
-]
-dependencies = ["django>=4.2"]
-
-[project.scripts]
-roya-docs = "roya_docs:main"
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=7",
-    "pytest-django>=4.5",
-    "ruff>=0.4",
-    "build>=1.0",
-    "twine>=5.0",
-    "pre-commit>=3.0",
+license = "MIT"
+authors = [{ name = "Abbas Faamarzi" }]
+dependencies = [
+    "django>=4.2",
 ]
 
 [project.urls]
 Homepage = "https://github.com/abbasfaamarzi/roya"
 Repository = "https://github.com/abbasfaamarzi/roya"
-Issues = "https://github.com/abbasfaamarzi/roya/issues"
-Changelog = "https://github.com/abbasfaamarzi/roya/blob/main/CHANGELOG.md"
 
-[tool.setuptools]
-package-dir = { roya = "." }
-packages = [
-    "roya",
-    "roya.behaviors",
-    "roya.components",
-    "roya.components.actions",
-    "roya.components.content",
-    "roya.components.data_display",
-    "roya.components.feedback",
-    "roya.components.forms",
-    "roya.components.layout",
-    "roya.components.navigation",
-    "roya.controllers",
-    "roya.core",
-    "roya.effects",
-    "roya.foundation",
-    "roya.templatetags",
-    "roya.theme",
-]
+[tool.setuptools.packages.find]
+include = ["roya*"]
 
 [tool.setuptools.package-data]
 roya = [
-    "templates/**/*.html",
     "static/**/*",
+    "templates/**/*",
+    "py.typed",
 ]
-
-[tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "tests.settings"
-pythonpath = ["."]
-python_files = ["test_*.py", "tests.py"]
-addopts = "-q"
-
-[tool.ruff]
-line-length = 100
-select = ["E", "F", "I", "UP", "B"]
-ignore = ["E501"]

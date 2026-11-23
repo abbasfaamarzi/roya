@@ -1,6 +1,0 @@
-<button id="{{ component.id }}" type="button"
-  class="roya-icon-button roya-icon-button--{{ variant }} roya-icon-button--{{ size }} roya-component"
-  data-roya-component="icon_button" aria-label="{{ aria_label|default:icon }}"
-  aria-pressed="{{ selected|yesno:'true,false' }}" {% if disabled %}disabled{% endif %}>
-  <span aria-hidden="true">{% if icon == "settings" %}⚙{% elif icon == "close" %}×{% elif icon == "search" %}⌕{% elif icon == "add" %}+{% else %}{{ icon }}{% endif %}</span>
-</button>

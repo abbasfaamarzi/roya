@@ -1,4 +1,0 @@
-<div id="{{ component.id }}" class="roya-anchor roya-component" data-roya-component="anchor_container"
-  style="justify-content:{% if horizontal_anchor == 'left' %}flex-start{% elif horizontal_anchor == 'right' %}flex-end{% else %}center{% endif %};align-items:{% if vertical_anchor == 'top' %}flex-start{% elif vertical_anchor == 'bottom' %}flex-end{% else %}center{% endif %};padding:{{ offset_y }} {{ offset_x }}">
-  {% for child in children %}{{ child.render }}{% endfor %}
-</div>

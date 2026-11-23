@@ -4,7 +4,8 @@ echo    Running initialization commands
 echo ================================================
 
 echo [Running terminal commands]
-python manage.py migrate
+pip install -e .
+python -c "import roya; print('roya OK ->', roya.__file__)"
 
 echo ================================================
 echo    All commands executed successfully.
