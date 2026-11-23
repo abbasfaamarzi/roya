@@ -1,6 +1,0 @@
-<div id="{{ component.id }}"
-     class="roya-grid roya-component"
-     data-roya-component="grid_container"
-     style="grid-template-columns: {{ grid_columns }}; grid-template-rows: {{ grid_rows }}; column-gap: var(--roya-space-{{ column_gap }}); row-gap: var(--roya-space-{{ row_gap }}); justify-items: {{ justify_items }};">
-  {% for child in children %}{{ child.render }}{% endfor %}
-</div>

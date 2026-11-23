@@ -1,9 +1,0 @@
-<header id="{{ component.id }}"
-        class="roya-appbar roya-appbar--{{ variant }} roya-component"
-        data-roya-component="appbar">
-  <div class="roya-appbar__leading">{% for child in children %}{{ child.render }}{% endfor %}</div>
-  <div class="roya-appbar__title">
-    {% if title %}<h1>{{ title }}</h1>{% endif %}
-    {% if subtitle %}<small>{{ subtitle }}</small>{% endif %}
-  </div>
-</header>

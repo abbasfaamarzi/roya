@@ -1,7 +1,0 @@
-<div id="{{ component.id }}" class="roya-date-picker roya-component" data-roya-component="date_picker">
-  {% if label %}<label class="roya-date-picker__label" for="{{ component.id }}-input">{{ label }}</label>{% endif %}
-  <input id="{{ component.id }}-input" class="roya-date-picker__input" type="date" name="{{ field_name }}" value="{{ value }}"
-         {% if min_date %}min="{{ min_date }}"{% endif %} {% if max_date %}max="{{ max_date }}"{% endif %}
-         {% if required %}required{% endif %} {% if disabled %}disabled{% endif %} />
-  {% if helper_text %}<small class="roya-date-picker__helper">{{ helper_text }}</small>{% endif %}
-</div>
