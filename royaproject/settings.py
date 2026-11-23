@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'roya',
-    'royaapp',
+    'demo_app',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
