@@ -1,0 +1,8 @@
+<div id="{{ component.id }}"
+     class="roya-snackbar roya-snackbar--{{ position }} roya-component"
+     role="status" aria-live="polite"
+     data-roya-component="snackbar">
+  <span class="roya-snackbar__message">{{ message }}</span>
+  {% if supporting_text %}<small>{{ supporting_text }}</small>{% endif %}
+  {% if action_label %}<button class="roya-snackbar__action">{{ action_label }}</button>{% endif %}
+</div>

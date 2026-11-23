@@ -1,0 +1,26 @@
+<header id="{{ component.id }}"
+        class="roya-appbar roya-appbar--{{ variant }} roya-component{% if fixed %} roya-appbar--fixed{% endif %}"
+        data-roya-component="appbar"
+        style="{% if bg_color %}background-color:{{ bg_color }};{% endif %}{% if text_color %}color:{{ text_color }};{% endif %}">
+  <div class="roya-appbar__leading">
+    {% if left_icon %}
+    <button type="button" class="roya-icon-button roya-icon-button--small" data-roya-appbar-nav aria-label="منو">
+      <span aria-hidden="true">{% if left_icon == "menu" %}☰{% elif left_icon == "arrow-back" %}←{% elif left_icon == "close" %}×{% else %}{{ left_icon }}{% endif %}</span>
+    </button>
+    {% endif %}
+    {% for child in children %}{{ child.render }}{% endfor %}
+  </div>
+  <div class="roya-appbar__title">
+    {% if title %}<h1>{{ title }}</h1>{% endif %}
+    {% if subtitle %}<small>{{ subtitle }}</small>{% endif %}
+  </div>
+  {% if right_icons %}
+  <div class="roya-appbar__actions">
+    {% for icon in right_icons %}
+    <button type="button" class="roya-icon-button roya-icon-button--small" data-roya-appbar-action data-icon="{{ icon }}" aria-label="{{ icon }}">
+      <span aria-hidden="true">{{ icon }}</span>
+    </button>
+    {% endfor %}
+  </div>
+  {% endif %}
+</header>

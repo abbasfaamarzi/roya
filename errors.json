@@ -1,0 +1,22 @@
+{
+  "pip:unknown": [
+    {
+      "line": 24,
+      "type": "pip",
+      "message": "Exception:",
+      "timestamp": "2026-11-23T20:51:15+00:00",
+      "init_bat_hash": "0b95dbe0e9bd722627af51e4515cbfd223784a891c396e4d30df842cc5edee35"
+    }
+  ],
+  "general": [
+    {
+      "line": 106,
+      "type": "traceback",
+      "exception": "tomllib.TOMLDecodeError",
+      "message": "Cannot declare ('build-system',) twice (at line 91, column 14)",
+      "traceback_lines": 82,
+      "timestamp": "2026-11-23T20:51:15+00:00",
+      "init_bat_hash": "0b95dbe0e9bd722627af51e4515cbfd223784a891c396e4d30df842cc5edee35"
+    }
+  ]
+}

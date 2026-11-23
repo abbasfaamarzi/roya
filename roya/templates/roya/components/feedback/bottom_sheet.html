@@ -1,0 +1,14 @@
+<section id="{{ component.id }}" class="roya-bottom-sheet roya-component{% if open %} is-open{% endif %}" data-roya-component="bottom_sheet"
+         data-dismissible="{{ dismissible|yesno:'true,false' }}"
+         data-close-on-backdrop="{{ close_on_backdrop|yesno:'true,false' }}"
+         data-close-on-escape="{{ close_on_escape|yesno:'true,false' }}"
+         {% if not open %}hidden{% endif %}>
+  {% if modal and backdrop %}<button class="roya-bottom-sheet__backdrop" type="button" data-roya-sheet-dismiss aria-label="بستن پنل"></button>{% endif %}
+  <div class="roya-bottom-sheet__panel" role="dialog" aria-modal="{{ modal|yesno:'true,false' }}" aria-label="{{ title }}"
+       style="max-height:{{ max_height }};{% if bg_color %}background-color:{{ bg_color }};{% endif %}{% if corner_radius %}border-top-left-radius:{{ corner_radius }};border-top-right-radius:{{ corner_radius }};{% endif %}">
+    {% if detachable %}<div class="roya-bottom-sheet__handle" aria-hidden="true"></div>{% endif %}
+    {% if title %}<h2 class="roya-bottom-sheet__title">{{ title }}</h2>{% endif %}
+    <div class="roya-bottom-sheet__content">{% for child in children %}{{ child.render }}{% endfor %}</div>
+    {% if dismissible %}<button class="roya-bottom-sheet__close" type="button" data-roya-sheet-dismiss aria-label="بستن">×</button>{% endif %}
+  </div>
+</section>

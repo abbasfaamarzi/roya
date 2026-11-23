@@ -1,0 +1,15 @@
+<div id="{{ component.id }}" class="roya-nav-overlay roya-component" data-roya-component="navigation_drawer"
+  data-open="{{ open|yesno:'true,false' }}" data-auto-close="{{ auto_close|yesno:'true,false' }}"
+  style="--roya-drawer-width:{{ width }}" {% if not open %}hidden{% endif %}>
+  {% if overlay %}<button type="button" class="roya-nav-overlay__backdrop" data-roya-drawer-close aria-label="بستن منو" style="position:absolute;inset:0;border:0;background:transparent"></button>{% endif %}
+  <nav class="roya-nav-drawer" aria-label="منوی اصلی" style="position:relative;z-index:1">
+    {% for item in items %}
+    <button type="button" class="roya-nav-drawer__item{% if item.value == selected_item or item.label == selected_item %} is-active{% endif %}"
+      data-roya-drawer-item data-value="{% if item.value %}{{ item.value }}{% elif item.label %}{{ item.label }}{% else %}{{ item }}{% endif %}">
+      {% if item.icon %}<span aria-hidden="true">{{ item.icon }}</span>{% endif %}
+      <span>{% if item.label %}{{ item.label }}{% else %}{{ item }}{% endif %}</span>
+    </button>
+    {% endfor %}
+    {% for child in children %}{{ child.render }}{% endfor %}
+  </nav>
+</div>

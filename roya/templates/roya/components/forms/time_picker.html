@@ -1,0 +1,7 @@
+<div id="{{ component.id }}" class="roya-time-picker roya-component" data-roya-component="time_picker">
+  {% if label %}<label class="roya-time-picker__label" for="{{ component.id }}-input">{{ label }}</label>{% endif %}
+  <input id="{{ component.id }}-input" class="roya-time-picker__input" type="time" name="{{ field_name }}" value="{{ value }}"
+         {% if min_time %}min="{{ min_time }}"{% endif %} {% if max_time %}max="{{ max_time }}"{% endif %}
+         {% if step %}step="{{ step }}"{% endif %} {% if required %}required{% endif %} {% if disabled %}disabled{% endif %} />
+  {% if helper_text %}<small class="roya-time-picker__helper">{{ helper_text }}</small>{% endif %}
+</div>

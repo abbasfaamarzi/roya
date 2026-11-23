@@ -1,0 +1,5 @@
+<label id="{{ component.id }}" class="roya-form-control roya-component" data-roya-component="slider">
+  {% if show_value %}<span class="roya-form-control__label">مقدار: <output data-roya-slider-value>{{ value }}</output></span>{% endif %}
+  <input class="roya-slider" type="range" min="{{ min }}" max="{{ max }}" step="{{ step }}"
+    value="{{ value }}" {% if disabled or readonly %}disabled{% endif %} aria-label="{{ aria_label|default:'مقدار' }}">
+</label>

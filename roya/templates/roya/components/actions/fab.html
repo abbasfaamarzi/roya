@@ -1,0 +1,7 @@
+<button id="{{ component.id }}" type="button"
+  class="{{ fab_classes }}{% if extended %} roya-fab--extended{% endif %}{% if fixed %} roya-fab--fixed{% endif %} roya-component"
+  data-roya-component="fab" aria-label="{{ label|default:icon }}"
+  {% if disabled or loading %}disabled{% endif %}>
+  <span class="roya-fab__icon" aria-hidden="true">{% if icon == "add" %}+{% elif icon == "edit" %}✎{% elif icon == "delete" %}×{% else %}{{ icon }}{% endif %}</span>
+  {% if label and extended %}<span>{{ label }}</span>{% endif %}
+</button>
