@@ -32,6 +32,9 @@ classifiers = [
 ]
 dependencies = ["django>=4.2"]
 
+[project.scripts]
+roya-docs = "roya_docs:main"
+
 [project.optional-dependencies]
 dev = [
     "pytest>=7",
@@ -77,6 +80,7 @@ roya = [
 
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "tests.settings"
+pythonpath = ["."]
 python_files = ["test_*.py", "tests.py"]
 addopts = "-q"
 

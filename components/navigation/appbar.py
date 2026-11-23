@@ -3,7 +3,7 @@ import logging
 
 from roya.core.component import Component
 from roya.core.events import Event
-from roya.core.properties import BooleanProperty, IntegerProperty, Property, StringProperty
+from roya.core.properties import BooleanProperty, IntegerProperty, ListProperty, Property, StringProperty
 
 logger = logging.getLogger("roya.components.navigation.appbar")
 
@@ -22,6 +22,10 @@ class AppBar(Component):
                                choices=["elevate", "collapse", "hide"])
     variant = Property(type=str, default="small",
                        choices=["small", "medium", "large", "center-aligned"])
+    left_icon = StringProperty(default="menu")
+    right_icons = ListProperty(default=list)
+    bg_color = StringProperty(default="")
+    text_color = StringProperty(default="")
 
     on_action = Event("appbar:action")
     on_menu_open = Event("appbar:menu-open")

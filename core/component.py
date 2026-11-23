@@ -67,10 +67,13 @@ class Component(LogMixin):
         logger.debug("Instantiated %s [%s]", self.__class__.__name__, self._id)
 
     def _validate(self):
-        for attr_name, attr in vars(self.__class__).items():
-            if isinstance(attr, Property):
-                attr.validate(getattr(self, attr_name))
-
+        """Validate declared properties, including properties inherited from base classes."""
+        validated = set()
+        for klass in type(self).__mro__:
+            for attr_name, attr in vars(klass).items():
+                if isinstance(attr, Property) and attr_name not in validated:
+                    validated.add(attr_name)
+                    attr.validate(getattr(self, attr_name))
     def render(self) -> str:
         if self.lifecycle.is_(LifecycleState.VALIDATED):
             self.lifecycle.transition(LifecycleState.RENDERED)

@@ -21,3 +21,5 @@ class Badge(Component):
                         choices=["top-start", "top-end", "bottom-start", "bottom-end"])
     dot = BooleanProperty(default=False)
     show_zero = BooleanProperty(default=False)
+    bg_color = StringProperty(default="0.9,0.2,0.2,1")
+    overlap = BooleanProperty(default=True)
