@@ -1,0 +1,35 @@
+{% load static %}<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Roya Social</title>
+  <link rel="stylesheet" href="/static/roya/css/roya.css">
+  <link rel="stylesheet" href="/static/instagram/css/base.css">
+  <link rel="stylesheet" href="/static/instagram/css/header.css">
+  <link rel="stylesheet" href="/static/instagram/css/stories.css">
+  <link rel="stylesheet" href="/static/instagram/css/post.css">
+  <link rel="stylesheet" href="/static/instagram/css/sidebar.css">
+  <link rel="stylesheet" href="/static/instagram/css/bottom_nav.css">
+  <link rel="stylesheet" href="/static/instagram/css/create_post.css">
+</head>
+<body>
+  <div class="instagram-shell">
+    <header class="site-header">{{ header_html|safe }}</header>
+    <main class="page-grid">
+      <section class="feed-column">
+        {{ stories_html|safe }}
+        {{ feed_html|safe }}
+      </section>
+      <aside class="sidebar-column">{{ sidebar_html|safe }}</aside>
+    </main>
+    {{ bottom_nav_html|safe }}
+    {{ create_post_html|safe }}
+  </div>
+  <script src="/static/instagram/js/header.js" defer></script>
+  <script src="/static/instagram/js/stories.js" defer></script>
+  <script src="/static/instagram/js/post.js" defer></script>
+  <script src="/static/instagram/js/sidebar.js" defer></script>
+  <script src="/static/instagram/js/bottom_nav.js" defer></script>
+  <script src="/static/instagram/js/create_post.js" defer></script>
+  <script src="/static/instagram/js/app.js" defer></script>
+</body></html>

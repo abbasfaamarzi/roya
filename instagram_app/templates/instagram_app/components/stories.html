@@ -1,0 +1,10 @@
+<section class="stories-widget" aria-label="استوری‌ها">
+  {% for story in stories %}
+  <button class="story-item" type="button" data-story-user="{{ story.username }}">
+    <span class="story-ring">
+      {% if story.image %}<img src="{{ story.image }}" alt="" loading="lazy">{% else %}<span class="story-initial">{{ story.initials }}</span>{% endif %}
+    </span>
+    <span class="story-name">{{ story.username }}</span>
+  </button>
+  {% endfor %}
+</section>

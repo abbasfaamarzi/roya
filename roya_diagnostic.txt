@@ -1,0 +1,69 @@
+ROYA PROJECT DIAGNOSTIC
+Project root: C:\Users\user\PycharmProjects\roya
+Python: 3.13.9
+Generated: 2026-11-24T01:10:02.048241+03:30
+
+EXPECTED TARGETS:
+[OK] pyproject.toml | 641 bytes | 29 lines | sha256=75f8b1c8d4948c21a834707f7c175db8ee958560ea7f4c70833663edd6169342
+[OK] apps.py | 539 bytes | 18 lines | sha256=50c09c56b8ae8c694af574fbf82292d27545dcc54bdba872ac4420292730a4e9
+[MISSING] roya/apps.py
+[OK] roya/core/component.py | 5678 bytes | 149 lines | sha256=aa4b4c5c0427bf2ebebc29b9c6cec585f915b57c5385b370a242e436a2b2248a
+[OK] roya/components/actions/button.py | 2229 bytes | 62 lines | sha256=198a1ef6700636cd43097189f12ae482af37c56c8e6b0dac468666e061ca360d
+[OK] roya/static/roya/js/roya.js | 19815 bytes | 437 lines | sha256=48f711657fdad66081667274ad617418de1b6de2627c85c3511a59b3a97397bd
+[OK] roya/templatetags/roya.py | 831 bytes | 32 lines | sha256=8714f5a6431cffdac383d21a43bae530c17a2a761604cb3b9425a21b43637089
+
+FALLBACK CANDIDATES:
+- apps.py:
+    apps.py (539 bytes)
+    demo_app/apps.py (153 bytes)
+    royaapp/apps.py (152 bytes)
+- button.py:
+    roya/components/actions/button.py (2229 bytes)
+- component.py:
+    roya/core/component.py (5678 bytes)
+- roya.js:
+    roya/static/roya/js/roya.js (19815 bytes)
+- roya.py:
+    roya/templatetags/roya.py (831 bytes)
+    templatetags/roya.py (2419 bytes)
+
+ROOT ENTRIES:
+- file: .editorconfig
+- directory: .git
+- directory: .github
+- file: .gitignore
+- directory: .idea
+- file: .pre-commit-config.yaml
+- directory: .pytest_cache
+- directory: .venv
+- file: __init__.py
+- directory: __pycache__
+- file: apps.py
+- file: CHANGELOG.md
+- file: CODE_OF_CONDUCT.md
+- file: CONTRIBUTING.md
+- file: db.sqlite3
+- file: demo.html
+- file: demo.py
+- directory: demo_app
+- file: errors.json
+- file: executed_commands.json
+- file: file_reader.json
+- file: init.bat
+- file: init_output.log
+- file: manage.py
+- file: MANIFEST.in
+- file: migrate_to_roya.py
+- file: pyproject.toml
+- file: README.md
+- file: requirements.txt
+- directory: roya
+- directory: roya.egg-info
+- file: roya_diagnostic.py
+- file: roya_docs.py
+- directory: royaapp
+- directory: royaproject
+- directory: swifthub
+- directory: templatetags
+- directory: tests
+- file: UPGRADE_0.2.0.md

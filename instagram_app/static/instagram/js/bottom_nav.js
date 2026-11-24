@@ -1,0 +1,1 @@
+document.addEventListener("click", event => { const nav = event.target.closest(".mobile-fallback button"); if (!nav) return; document.querySelectorAll(".mobile-fallback button").forEach(item => item.removeAttribute("aria-current")); nav.setAttribute("aria-current", "page"); });

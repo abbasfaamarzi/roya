@@ -1,0 +1,1 @@
+document.addEventListener("click", event => { const button = event.target.closest(".follow-button"); if (!button) return; const following = button.dataset.following === "true"; button.dataset.following = String(!following); button.textContent = following ? "دنبال کردن" : "دنبال می‌کنید"; });

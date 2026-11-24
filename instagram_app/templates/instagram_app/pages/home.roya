@@ -1,0 +1,266 @@
+#:roya 1.0
+#:include "../styles/instagram.roya"
+#:logic instagram_app.logic
+
+InstagramPage:
+    Topbar:
+        BrandLabel:
+            text: "Roya"
+        SearchField:
+            id: "ig-search"
+            field_name: "search"
+            type: "search"
+            placeholder: "جست‌وجو در رویا..."
+            leading_icon: "⌕"
+            on_change:
+                action: instagram.search_posts
+        HeaderActions:
+            button:
+                label: "ایجاد پست"
+                icon: "＋"
+                variant: "filled"
+                class_name: "ig-create-trigger"
+                on_click:
+                    action: instagram.open_create
+            icon_button:
+                icon: "♡"
+                aria_label: "فعالیت‌ها"
+                class_name: "ig-header-icon"
+                on_click:
+                    action: instagram.navigate
+                    args:
+                        target: "ig-feed"
+            avatar:
+                initials: "R"
+                alt: "نمایه شما"
+                size: "medium"
+
+    MainLayout:
+        FeedColumn:
+            id: "ig-feed"
+            StoriesPanel:
+                SectionTitle:
+                    text: "استوری‌ها"
+                StoryStrip:
+                    for story in stories key story.username:
+                        StoryItem:
+                            StoryAvatar:
+                                initials: story.initials
+                                src: story.image
+                                alt: story.username
+                                size: "large"
+                            StoryOpenButton:
+                                label: story.username
+                                variant: "text"
+                                on_click:
+                                    action: instagram.open_story
+                                    args:
+                                        username: story.username
+                                        image: story.image
+
+            FeedHeading:
+                Label:
+                    text: "برای شما"
+                    class_name: "ig-feed-title"
+                Label:
+                    text: "تازه‌ترین لحظه‌ها از دوستانتان"
+                    class_name: "ig-feed-subtitle"
+
+            for post in posts key post.id:
+                PostCard:
+                    PostHeader:
+                        PostIdentity:
+                            PostAvatar:
+                                initials: post.initials
+                                alt: post.username
+                                size: "medium"
+                            PostAuthor:
+                                PostUsername:
+                                    text: post.username
+                                PostLocation:
+                                    text: post.location
+                        icon_button:
+                            icon: "⋯"
+                            aria_label: "گزینه‌های پست"
+                            on_click:
+                                action: instagram.open_post
+                                args:
+                                    post_id: post.id
+
+                    if post.image:
+                        PostMedia:
+                            src: post.image
+                            alt: post.caption
+                            width: "100%"
+                            height: "auto"
+                            object_fit: "cover"
+                    if not post.image:
+                        PostPlaceholder:
+                            text: "تصویری برای این پست ثبت نشده است"
+
+                    PostActions:
+                        PostActionGroup:
+                            icon_button:
+                                icon: "♥"
+                                aria_label: "پسندیدن"
+                                selected: post.liked
+                                class_name: "ig-like-button"
+                                on_click:
+                                    action: instagram.toggle_like
+                                    args:
+                                        post_id: post.id
+                                        likes: post.likes
+                            icon_button:
+                                icon: "◌"
+                                aria_label: "دیدن دیدگاه‌ها"
+                                on_click:
+                                    action: instagram.open_post
+                                    args:
+                                        post_id: post.id
+                            icon_button:
+                                icon: "↗"
+                                aria_label: "اشتراک‌گذاری"
+                                on_click:
+                                    action: instagram.share_post
+                                    args:
+                                        post_id: post.id
+                        icon_button:
+                            icon: "▱"
+                            aria_label: "ذخیره پست"
+                            selected: post.saved
+                            class_name: "ig-save-button"
+                            on_click:
+                                action: instagram.toggle_save
+                                args:
+                                    post_id: post.id
+
+                    PostDetails:
+                        PostLikes:
+                            text: str(post.likes) + " پسند"
+                        PostCaption:
+                            text: post.username + "  " + post.caption
+                        if post.comments_count > 0:
+                            PostCommentsButton:
+                                label: "مشاهده " + str(post.comments_count) + " دیدگاه"
+                                variant: "text"
+                                on_click:
+                                    action: instagram.open_post
+                                    args:
+                                        post_id: post.id
+
+        Sidebar:
+            ProfilePanel:
+                id: "ig-profile"
+                ProfileRow:
+                    ProfileAvatar:
+                        initials: profile.initials
+                        src: profile.image
+                        alt: profile.username
+                        size: "large"
+                    ProfileIdentity:
+                        ProfileUsername:
+                            text: profile.username
+                        ProfileName:
+                            text: profile.full_name
+                    ProfileSwitch:
+                        label: "تغییر"
+                        variant: "text"
+                        on_click:
+                            action: instagram.navigate
+                            args:
+                                target: "ig-feed"
+
+                SuggestionsHeader:
+                    text: "پیشنهاد برای شما"
+                for user in suggestions key user.username:
+                    SuggestionRow:
+                        SuggestionAvatar:
+                            initials: user.initials
+                            src: user.image
+                            alt: user.username
+                            size: "medium"
+                        SuggestionIdentity:
+                            SuggestionUsername:
+                                text: user.username
+                            SuggestionReason:
+                                text: user.reason
+                        FollowButton:
+                            label: ("دنبال می‌کنید" if user.following else "دنبال کردن")
+                            variant: "text"
+                            class_name: "ig-follow-button"
+                            on_click:
+                                action: instagram.toggle_follow
+                                args:
+                                    username: user.username
+                SidebarFooter:
+                    text: "درباره ما  ·  راهنما  ·  حریم خصوصی  ·  شرایط استفاده"
+                    class_name: "ig-sidebar-footer"
+
+    BottomNavigation:
+        icon_button:
+            icon: "⌂"
+            aria_label: "خانه"
+            selected: true
+            on_click:
+                action: instagram.navigate
+                args:
+                    target: "ig-feed"
+        icon_button:
+            icon: "⌕"
+            aria_label: "جست‌وجو"
+            on_click:
+                action: instagram.navigate
+                args:
+                    target: "ig-search"
+        icon_button:
+            icon: "＋"
+            aria_label: "ایجاد پست"
+            on_click:
+                action: instagram.open_create
+        icon_button:
+            icon: "♡"
+            aria_label: "فعالیت‌ها"
+            on_click:
+                action: instagram.navigate
+                args:
+                    target: "ig-feed"
+        icon_button:
+            icon: "●"
+            aria_label: "نمایه"
+            on_click:
+                action: instagram.navigate
+                args:
+                    target: "ig-profile"
+
+    CreateOverlay:
+        CreateDialog:
+            CreateDialogHeader:
+                Label:
+                    text: "ایجاد پست جدید"
+                    class_name: "ig-dialog-title"
+                icon_button:
+                    icon: "×"
+                    aria_label: "بستن"
+                    on_click:
+                        action: instagram.close_create
+            Label:
+                text: "متن یا شرح کوتاه پست خود را بنویسید."
+                class_name: "ig-dialog-help"
+            CreateCaption:
+                field_name: "caption"
+                placeholder: "چه چیزی در ذهن دارید؟"
+                max_length: 500
+                required: true
+                class_name: "ig-caption-field"
+            CreateDialogActions:
+                button:
+                    label: "انصراف"
+                    variant: "text"
+                    on_click:
+                        action: instagram.close_create
+                button:
+                    label: "انتشار پست"
+                    variant: "filled"
+                    class_name: "ig-publish-button"
+                    on_click:
+                        action: instagram.publish_post

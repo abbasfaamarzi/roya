@@ -1,0 +1,8 @@
+<section class="profile-widget">
+  <div class="profile-summary"><span>{{ profile_avatar_html|safe }}</span><div><b>roya.user</b><small>حساب نمایشی شما</small></div><button type="button" class="switch-account">تغییر</button></div>
+  <div class="suggestion-heading"><b>پیشنهادهایی برای شما</b><a href="#">مشاهده همه</a></div>
+  {% for user in suggestions %}
+  <div class="suggestion-row"><span>{{ user.avatar_html|safe }}</span><div><b>{{ user.username }}</b><small>پیشنهاد برای شما</small></div><button type="button" class="follow-button">دنبال کردن</button></div>
+  {% endfor %}
+  <p class="sidebar-note">دموی محلی ساخته‌شده با کتابخانه Roya</p>
+</section>

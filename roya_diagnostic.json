@@ -1,0 +1,3182 @@
+{
+  "diagnostic": "roya-project-reader-check",
+  "generated_at": "2026-11-24T01:10:02.048241+03:30",
+  "project_root": "C:\\Users\\user\\PycharmProjects\\roya",
+  "python": "3.13.9 (tags/v3.13.9:8183fa5, Oct 14 2025, 14:09:13) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.19045-SP0",
+  "targets": {
+    "pyproject.toml": {
+      "path": "pyproject.toml",
+      "exists": true,
+      "size_bytes": 641,
+      "sha256": "75f8b1c8d4948c21a834707f7c175db8ee958560ea7f4c70833663edd6169342",
+      "line_count": 29,
+      "lines": [
+        [
+          1,
+          "[build-system]"
+        ],
+        [
+          2,
+          "requires = [\"setuptools>=61\", \"wheel\"]"
+        ],
+        [
+          3,
+          "build-backend = \"setuptools.build_meta\""
+        ],
+        [
+          4,
+          ""
+        ],
+        [
+          5,
+          "[project]"
+        ],
+        [
+          6,
+          "name = \"roya\""
+        ],
+        [
+          7,
+          "version = \"0.2.0\""
+        ],
+        [
+          8,
+          "description = \"Material Design 3 component library for Django\""
+        ],
+        [
+          9,
+          "readme = \"README.md\""
+        ],
+        [
+          10,
+          "requires-python = \">=3.9\""
+        ],
+        [
+          11,
+          "license = \"MIT\""
+        ],
+        [
+          12,
+          "authors = [{ name = \"Abbas Faamarzi\" }]"
+        ],
+        [
+          13,
+          "dependencies = ["
+        ],
+        [
+          14,
+          "    \"django>=4.2\","
+        ],
+        [
+          15,
+          "]"
+        ],
+        [
+          16,
+          ""
+        ],
+        [
+          17,
+          "[project.urls]"
+        ],
+        [
+          18,
+          "Homepage = \"https://github.com/abbasfaamarzi/roya\""
+        ],
+        [
+          19,
+          "Repository = \"https://github.com/abbasfaamarzi/roya\""
+        ],
+        [
+          20,
+          ""
+        ],
+        [
+          21,
+          "[tool.setuptools.packages.find]"
+        ],
+        [
+          22,
+          "include = [\"roya*\"]"
+        ],
+        [
+          23,
+          ""
+        ],
+        [
+          24,
+          "[tool.setuptools.package-data]"
+        ],
+        [
+          25,
+          "roya = ["
+        ],
+        [
+          26,
+          "    \"static/**/*\","
+        ],
+        [
+          27,
+          "    \"templates/**/*\","
+        ],
+        [
+          28,
+          "    \"py.typed\","
+        ],
+        [
+          29,
+          "]"
+        ]
+      ]
+    },
+    "apps.py": {
+      "path": "apps.py",
+      "exists": true,
+      "size_bytes": 539,
+      "sha256": "50c09c56b8ae8c694af574fbf82292d27545dcc54bdba872ac4420292730a4e9",
+      "line_count": 18,
+      "lines": [
+        [
+          1,
+          "\"\"\"Django AppConfig for Roya.\"\"\""
+        ],
+        [
+          2,
+          "import logging"
+        ],
+        [
+          3,
+          "from django.apps import AppConfig"
+        ],
+        [
+          4,
+          ""
+        ],
+        [
+          5,
+          "logger = logging.getLogger(\"roya.apps\")"
+        ],
+        [
+          6,
+          ""
+        ],
+        [
+          7,
+          ""
+        ],
+        [
+          8,
+          "class RoyaConfig(AppConfig):"
+        ],
+        [
+          9,
+          "    name = \"roya\""
+        ],
+        [
+          10,
+          "    verbose_name = \"Roya Material Design Components\""
+        ],
+        [
+          11,
+          "    default_auto_field = \"django.db.models.BigAutoField\""
+        ],
+        [
+          12,
+          ""
+        ],
+        [
+          13,
+          "    def ready(self):"
+        ],
+        [
+          14,
+          "        logger.info(\"Roya library ready\")"
+        ],
+        [
+          15,
+          "        from roya.core.registry import registry"
+        ],
+        [
+          16,
+          "        from roya.components import register_all"
+        ],
+        [
+          17,
+          "        register_all(registry)"
+        ],
+        [
+          18,
+          "        logger.info(\"Registered %d components\", registry.count())"
+        ]
+      ]
+    },
+    "roya/core/component.py": {
+      "path": "roya/core/component.py",
+      "exists": true,
+      "size_bytes": 5678,
+      "sha256": "aa4b4c5c0427bf2ebebc29b9c6cec585f915b57c5385b370a242e436a2b2248a",
+      "line_count": 149,
+      "lines": [
+        [
+          1,
+          "\"\"\"Base Component for all Roya components.\"\"\""
+        ],
+        [
+          2,
+          "import uuid"
+        ],
+        [
+          3,
+          "import logging"
+        ],
+        [
+          4,
+          "from typing import Any, Dict"
+        ],
+        [
+          5,
+          ""
+        ],
+        [
+          6,
+          "from .events import Event, EventPayload, bus"
+        ],
+        [
+          7,
+          "from .exceptions import ComponentError"
+        ],
+        [
+          8,
+          "from .lifecycle import Lifecycle, LifecycleState"
+        ],
+        [
+          9,
+          "from .logging import LogMixin"
+        ],
+        [
+          10,
+          "from .properties import ("
+        ],
+        [
+          11,
+          "    BooleanProperty, DictProperty, Property, StringProperty,"
+        ],
+        [
+          12,
+          ")"
+        ],
+        [
+          13,
+          "from .state import StateStore"
+        ],
+        [
+          14,
+          ""
+        ],
+        [
+          15,
+          "logger = logging.getLogger(\"roya.core.component\")"
+        ],
+        [
+          16,
+          ""
+        ],
+        [
+          17,
+          ""
+        ],
+        [
+          18,
+          "class Component(LogMixin):"
+        ],
+        [
+          19,
+          "    \"\"\"Abstract base for every Roya component."
+        ],
+        [
+          20,
+          ""
+        ],
+        [
+          21,
+          "    Object-oriented, declarative, observable and lifecycle-managed."
+        ],
+        [
+          22,
+          "    \"\"\""
+        ],
+        [
+          23,
+          ""
+        ],
+        [
+          24,
+          "    name = \"component\""
+        ],
+        [
+          25,
+          "    template_name = None"
+        ],
+        [
+          26,
+          ""
+        ],
+        [
+          27,
+          "    id = StringProperty(default=\"\")"
+        ],
+        [
+          28,
+          "    class_name = StringProperty(default=\"\")"
+        ],
+        [
+          29,
+          "    variant = StringProperty(default=\"default\")"
+        ],
+        [
+          30,
+          "    size = StringProperty(default=\"medium\")"
+        ],
+        [
+          31,
+          "    color = StringProperty(default=\"primary\")"
+        ],
+        [
+          32,
+          "    disabled = BooleanProperty(default=False)"
+        ],
+        [
+          33,
+          "    hidden = BooleanProperty(default=False)"
+        ],
+        [
+          34,
+          "    visible = BooleanProperty(default=True)"
+        ],
+        [
+          35,
+          "    loading = BooleanProperty(default=False)"
+        ],
+        [
+          36,
+          "    readonly = BooleanProperty(default=False)"
+        ],
+        [
+          37,
+          "    required = BooleanProperty(default=False)"
+        ],
+        [
+          38,
+          "    role = StringProperty(default=\"\")"
+        ],
+        [
+          39,
+          "    aria_label = StringProperty(default=\"\")"
+        ],
+        [
+          40,
+          "    theme = StringProperty(default=\"inherited\")"
+        ],
+        [
+          41,
+          "    direction = StringProperty(default=\"auto\")"
+        ],
+        [
+          42,
+          "    responsive = BooleanProperty(default=True)"
+        ],
+        [
+          43,
+          "    animation = BooleanProperty(default=True)"
+        ],
+        [
+          44,
+          "    data = DictProperty(default=dict)"
+        ],
+        [
+          45,
+          ""
+        ],
+        [
+          46,
+          "    on_mount = Event(\"component:mount\")"
+        ],
+        [
+          47,
+          "    on_ready = Event(\"component:ready\")"
+        ],
+        [
+          48,
+          "    on_update = Event(\"component:update\")"
+        ],
+        [
+          49,
+          "    on_unmount = Event(\"component:unmount\")"
+        ],
+        [
+          50,
+          ""
+        ],
+        [
+          51,
+          "    def __init__(self, **kwargs):"
+        ],
+        [
+          52,
+          "        self._id = kwargs.pop(\"id\", None) or f\"roya-{uuid.uuid4().hex[:8]}\""
+        ],
+        [
+          53,
+          "        self.id = self._id"
+        ],
+        [
+          54,
+          "        self.children = []"
+        ],
+        [
+          55,
+          "        self.parent = None"
+        ],
+        [
+          56,
+          "        self.state = StateStore()"
+        ],
+        [
+          57,
+          "        self.lifecycle = Lifecycle(self)"
+        ],
+        [
+          58,
+          ""
+        ],
+        [
+          59,
+          "        for key, value in kwargs.items():"
+        ],
+        [
+          60,
+          "            if not hasattr(self.__class__, key):"
+        ],
+        [
+          61,
+          "                raise ComponentError(f\"{self.__class__.__name__}: unknown property '{key}'\")"
+        ],
+        [
+          62,
+          "            setattr(self, key, value)"
+        ],
+        [
+          63,
+          ""
+        ],
+        [
+          64,
+          "        self.lifecycle.transition(LifecycleState.INITIALIZED)"
+        ],
+        [
+          65,
+          "        self._validate()"
+        ],
+        [
+          66,
+          "        self.lifecycle.transition(LifecycleState.VALIDATED)"
+        ],
+        [
+          67,
+          "        logger.debug(\"Instantiated %s [%s]\", self.__class__.__name__, self._id)"
+        ],
+        [
+          68,
+          ""
+        ],
+        [
+          69,
+          "    def _validate(self):"
+        ],
+        [
+          70,
+          "        \"\"\"Validate declared properties, including properties inherited from base classes.\"\"\""
+        ],
+        [
+          71,
+          "        validated = set()"
+        ],
+        [
+          72,
+          "        for klass in type(self).__mro__:"
+        ],
+        [
+          73,
+          "            for attr_name, attr in vars(klass).items():"
+        ],
+        [
+          74,
+          "                if isinstance(attr, Property) and attr_name not in validated:"
+        ],
+        [
+          75,
+          "                    validated.add(attr_name)"
+        ],
+        [
+          76,
+          "                    attr.validate(getattr(self, attr_name))"
+        ],
+        [
+          77,
+          "    def render(self) -> str:"
+        ],
+        [
+          78,
+          "        if self.lifecycle.is_(LifecycleState.VALIDATED):"
+        ],
+        [
+          79,
+          "            self.lifecycle.transition(LifecycleState.RENDERED)"
+        ],
+        [
+          80,
+          "        return self._render()"
+        ],
+        [
+          81,
+          ""
+        ],
+        [
+          82,
+          "    def _render(self) -> str:"
+        ],
+        [
+          83,
+          "        if not self.template_name:"
+        ],
+        [
+          84,
+          "            return self._fallback_render()"
+        ],
+        [
+          85,
+          "        try:"
+        ],
+        [
+          86,
+          "            from django.template.loader import render_to_string"
+        ],
+        [
+          87,
+          "            return render_to_string(self.template_name, self.get_context())"
+        ],
+        [
+          88,
+          "        except Exception as exc:"
+        ],
+        [
+          89,
+          "            logger.warning(\"Template '%s' failed for %s: %s\", self.template_name, self, exc)"
+        ],
+        [
+          90,
+          "            return self._fallback_render()"
+        ],
+        [
+          91,
+          ""
+        ],
+        [
+          92,
+          "    def _fallback_render(self) -> str:"
+        ],
+        [
+          93,
+          "        classes = f\"roya-component {self.class_name}\".strip()"
+        ],
+        [
+          94,
+          "        return ("
+        ],
+        [
+          95,
+          "            f'<div id=\"{self.id}\" class=\"{classes}\" '"
+        ],
+        [
+          96,
+          "            f'data-roya-component=\"{self.name}\"></div>'"
+        ],
+        [
+          97,
+          "        )"
+        ],
+        [
+          98,
+          ""
+        ],
+        [
+          99,
+          "    def get_context(self) -> Dict[str, Any]:"
+        ],
+        [
+          100,
+          "        context = {\"component\": self, \"children\": self.children}"
+        ],
+        [
+          101,
+          "        for klass in type(self).__mro__:"
+        ],
+        [
+          102,
+          "            for attr_name, attr in vars(klass).items():"
+        ],
+        [
+          103,
+          "                if isinstance(attr, Property) and attr_name not in context:"
+        ],
+        [
+          104,
+          "                    context[attr_name] = getattr(self, attr_name)"
+        ],
+        [
+          105,
+          "        return context"
+        ],
+        [
+          106,
+          ""
+        ],
+        [
+          107,
+          "    def mount(self):"
+        ],
+        [
+          108,
+          "        if not self.lifecycle.is_(LifecycleState.RENDERED, LifecycleState.READY):"
+        ],
+        [
+          109,
+          "            self.render()"
+        ],
+        [
+          110,
+          "        if self.lifecycle.is_(LifecycleState.RENDERED):"
+        ],
+        [
+          111,
+          "            self.lifecycle.transition(LifecycleState.MOUNTED)"
+        ],
+        [
+          112,
+          "            self.on_mount.emit()"
+        ],
+        [
+          113,
+          "            self.lifecycle.transition(LifecycleState.READY)"
+        ],
+        [
+          114,
+          "            self.on_ready.emit()"
+        ],
+        [
+          115,
+          "            bus.emit(self._event(\"component:mount\"))"
+        ],
+        [
+          116,
+          ""
+        ],
+        [
+          117,
+          "    def unmount(self):"
+        ],
+        [
+          118,
+          "        if self.lifecycle.is_(LifecycleState.UNMOUNTED, LifecycleState.DESTROYED):"
+        ],
+        [
+          119,
+          "            return"
+        ],
+        [
+          120,
+          "        self.on_unmount.emit()"
+        ],
+        [
+          121,
+          "        self.lifecycle.transition(LifecycleState.UNMOUNTED)"
+        ],
+        [
+          122,
+          "        bus.emit(self._event(\"component:unmount\"))"
+        ],
+        [
+          123,
+          ""
+        ],
+        [
+          124,
+          "    def destroy(self):"
+        ],
+        [
+          125,
+          "        self.unmount()"
+        ],
+        [
+          126,
+          "        if self.lifecycle.is_(LifecycleState.UNMOUNTED):"
+        ],
+        [
+          127,
+          "            self.lifecycle.transition(LifecycleState.DESTROYED)"
+        ],
+        [
+          128,
+          ""
+        ],
+        [
+          129,
+          "    def add_child(self, child: \"Component\") -> \"Component\":"
+        ],
+        [
+          130,
+          "        child.parent = self"
+        ],
+        [
+          131,
+          "        self.children.append(child)"
+        ],
+        [
+          132,
+          "        return child"
+        ],
+        [
+          133,
+          ""
+        ],
+        [
+          134,
+          "    def remove_child(self, child: \"Component\"):"
+        ],
+        [
+          135,
+          "        if child in self.children:"
+        ],
+        [
+          136,
+          "            self.children.remove(child)"
+        ],
+        [
+          137,
+          "            child.parent = None"
+        ],
+        [
+          138,
+          ""
+        ],
+        [
+          139,
+          "    def set_state(self, key: str, value: Any):"
+        ],
+        [
+          140,
+          "        self.state.set(key, value)"
+        ],
+        [
+          141,
+          ""
+        ],
+        [
+          142,
+          "    def get_state(self, key: str, default=None):"
+        ],
+        [
+          143,
+          "        return self.state.get(key, default)"
+        ],
+        [
+          144,
+          ""
+        ],
+        [
+          145,
+          "    def _event(self, event_type: str) -> EventPayload:"
+        ],
+        [
+          146,
+          "        return EventPayload(type=event_type, component_id=self.id, source=self)"
+        ],
+        [
+          147,
+          ""
+        ],
+        [
+          148,
+          "    def __repr__(self):"
+        ],
+        [
+          149,
+          "        return f\"<{self.__class__.__name__} id={self.id}>\""
+        ]
+      ]
+    },
+    "roya/components/actions/button.py": {
+      "path": "roya/components/actions/button.py",
+      "exists": true,
+      "size_bytes": 2229,
+      "sha256": "198a1ef6700636cd43097189f12ae482af37c56c8e6b0dac468666e061ca360d",
+      "line_count": 62,
+      "lines": [
+        [
+          1,
+          "\"\"\"Button - Material Design 3 button with all variants.\"\"\""
+        ],
+        [
+          2,
+          "import logging"
+        ],
+        [
+          3,
+          ""
+        ],
+        [
+          4,
+          "from roya.core.component import Component"
+        ],
+        [
+          5,
+          "from roya.core.events import Event"
+        ],
+        [
+          6,
+          "from roya.core.properties import BooleanProperty, Property, StringProperty"
+        ],
+        [
+          7,
+          ""
+        ],
+        [
+          8,
+          "logger = logging.getLogger(\"roya.components.actions.button\")"
+        ],
+        [
+          9,
+          ""
+        ],
+        [
+          10,
+          ""
+        ],
+        [
+          11,
+          "class Button(Component):"
+        ],
+        [
+          12,
+          "    \"\"\"Material Design 3 Button with all standard variants.\"\"\""
+        ],
+        [
+          13,
+          ""
+        ],
+        [
+          14,
+          "    name = \"button\""
+        ],
+        [
+          15,
+          "    template_name = \"roya/components/actions/button.html\""
+        ],
+        [
+          16,
+          ""
+        ],
+        [
+          17,
+          "    label = StringProperty(default=\"\")"
+        ],
+        [
+          18,
+          "    variant = Property(type=str, default=\"filled\","
+        ],
+        [
+          19,
+          "                       choices=[\"filled\", \"elevated\", \"outlined\", \"text\", \"tonal\"])"
+        ],
+        [
+          20,
+          "    size = Property(type=str, default=\"medium\","
+        ],
+        [
+          21,
+          "                    choices=[\"small\", \"medium\", \"large\"])"
+        ],
+        [
+          22,
+          "    color = StringProperty(default=\"primary\")"
+        ],
+        [
+          23,
+          "    icon = StringProperty(default=\"\")"
+        ],
+        [
+          24,
+          "    icon_position = Property(type=str, default=\"start\", choices=[\"start\", \"end\"])"
+        ],
+        [
+          25,
+          "    icon_only = BooleanProperty(default=False)"
+        ],
+        [
+          26,
+          "    full_width = BooleanProperty(default=False)"
+        ],
+        [
+          27,
+          "    href = StringProperty(default=\"\")"
+        ],
+        [
+          28,
+          "    target = StringProperty(default=\"\")"
+        ],
+        [
+          29,
+          "    type = Property(type=str, default=\"button\","
+        ],
+        [
+          30,
+          "                    choices=[\"button\", \"submit\", \"reset\"])"
+        ],
+        [
+          31,
+          "    ripple = BooleanProperty(default=True)"
+        ],
+        [
+          32,
+          "    elevation = Property(type=int, default=0)"
+        ],
+        [
+          33,
+          "    rounded = BooleanProperty(default=True)"
+        ],
+        [
+          34,
+          ""
+        ],
+        [
+          35,
+          "    on_click = Event(\"button:click\", cancelable=True)"
+        ],
+        [
+          36,
+          "    on_press = Event(\"button:press\")"
+        ],
+        [
+          37,
+          "    on_release = Event(\"button:release\")"
+        ],
+        [
+          38,
+          "    on_focus = Event(\"button:focus\")"
+        ],
+        [
+          39,
+          "    on_blur = Event(\"button:blur\")"
+        ],
+        [
+          40,
+          ""
+        ],
+        [
+          41,
+          "    def click(self):"
+        ],
+        [
+          42,
+          "        payload = self.on_click.emit()"
+        ],
+        [
+          43,
+          "        logger.debug(\"Button clicked: %s\", self.id)"
+        ],
+        [
+          44,
+          "        return payload"
+        ],
+        [
+          45,
+          ""
+        ],
+        [
+          46,
+          "    def set_loading(self, value: bool = True):"
+        ],
+        [
+          47,
+          "        self.loading = value"
+        ],
+        [
+          48,
+          ""
+        ],
+        [
+          49,
+          "    def get_context(self):"
+        ],
+        [
+          50,
+          "        ctx = super().get_context()"
+        ],
+        [
+          51,
+          "        classes = ["
+        ],
+        [
+          52,
+          "            \"roya-button\", f\"roya-button--{self.variant}\","
+        ],
+        [
+          53,
+          "            f\"roya-button--{self.size}\","
+        ],
+        [
+          54,
+          "        ]"
+        ],
+        [
+          55,
+          "        if self.full_width:"
+        ],
+        [
+          56,
+          "            classes.append(\"roya-button--full-width\")"
+        ],
+        [
+          57,
+          "        if self.icon_only:"
+        ],
+        [
+          58,
+          "            classes.append(\"roya-button--icon-only\")"
+        ],
+        [
+          59,
+          "        if self.rounded:"
+        ],
+        [
+          60,
+          "            classes.append(\"roya-button--rounded\")"
+        ],
+        [
+          61,
+          "        ctx[\"classes\"] = \" \".join(classes)"
+        ],
+        [
+          62,
+          "        return ctx"
+        ]
+      ]
+    },
+    "roya/static/roya/js/roya.js": {
+      "path": "roya/static/roya/js/roya.js",
+      "exists": true,
+      "size_bytes": 19815,
+      "sha256": "48f711657fdad66081667274ad617418de1b6de2627c85c3511a59b3a97397bd",
+      "line_count": 437,
+      "lines": [
+        [
+          1,
+          "/* Roya JS runtime: lifecycle, events, behaviors */"
+        ],
+        [
+          2,
+          "(function (global) {"
+        ],
+        [
+          3,
+          "  \"use strict\";"
+        ],
+        [
+          4,
+          ""
+        ],
+        [
+          5,
+          "  const Roya = {"
+        ],
+        [
+          6,
+          "    version: \"0.2.0\","
+        ],
+        [
+          7,
+          "    registry: new Map(),"
+        ],
+        [
+          8,
+          "    bus: new Map(),"
+        ],
+        [
+          9,
+          ""
+        ],
+        [
+          10,
+          "    register(name, factory) {"
+        ],
+        [
+          11,
+          "      this.registry.set(name, factory);"
+        ],
+        [
+          12,
+          "    },"
+        ],
+        [
+          13,
+          ""
+        ],
+        [
+          14,
+          "    emit(type, detail) {"
+        ],
+        [
+          15,
+          "      const payload = { type, timestamp: Date.now(), detail: detail || {} };"
+        ],
+        [
+          16,
+          "      (this.bus.get(type) || []).forEach((h) => {"
+        ],
+        [
+          17,
+          "        try { h(payload); } catch (err) { console.error(\"[Roya]\", err); }"
+        ],
+        [
+          18,
+          "      });"
+        ],
+        [
+          19,
+          "    },"
+        ],
+        [
+          20,
+          ""
+        ],
+        [
+          21,
+          "    on(type, handler) {"
+        ],
+        [
+          22,
+          "      if (!this.bus.has(type)) this.bus.set(type, []);"
+        ],
+        [
+          23,
+          "      this.bus.get(type).push(handler);"
+        ],
+        [
+          24,
+          "      return () => this.off(type, handler);"
+        ],
+        [
+          25,
+          "    },"
+        ],
+        [
+          26,
+          ""
+        ],
+        [
+          27,
+          "    off(type, handler) {"
+        ],
+        [
+          28,
+          "      const list = this.bus.get(type) || [];"
+        ],
+        [
+          29,
+          "      const i = list.indexOf(handler);"
+        ],
+        [
+          30,
+          "      if (i >= 0) list.splice(i, 1);"
+        ],
+        [
+          31,
+          "    },"
+        ],
+        [
+          32,
+          ""
+        ],
+        [
+          33,
+          "    mount(root) {"
+        ],
+        [
+          34,
+          "      const scope = root || document;"
+        ],
+        [
+          35,
+          "      scope.querySelectorAll(\"[data-roya-component]\").forEach((el) => {"
+        ],
+        [
+          36,
+          "        if (el.dataset.royaMounted === \"true\") return;"
+        ],
+        [
+          37,
+          "        const name = el.dataset.royaComponent;"
+        ],
+        [
+          38,
+          "        const factory = this.registry.get(name);"
+        ],
+        [
+          39,
+          "        try {"
+        ],
+        [
+          40,
+          "          if (factory) factory(el);"
+        ],
+        [
+          41,
+          "          else this.mountBuiltin(name, el);"
+        ],
+        [
+          42,
+          "          el.dataset.royaMounted = \"true\";"
+        ],
+        [
+          43,
+          "        } catch (err) { console.error(\"[Roya] mount failed:\", name, err); }"
+        ],
+        [
+          44,
+          "      });"
+        ],
+        [
+          45,
+          "    },"
+        ],
+        [
+          46,
+          ""
+        ],
+        [
+          47,
+          "    mountBuiltin(name, el) {"
+        ],
+        [
+          48,
+          "      if (name === \"date_picker\" || name === \"time_picker\") {"
+        ],
+        [
+          49,
+          "        const input = el.querySelector(\"input\");"
+        ],
+        [
+          50,
+          "        if (!input) return;"
+        ],
+        [
+          51,
+          "        const eventPrefix = name === \"date_picker\" ? \"date-picker\" : \"time-picker\";"
+        ],
+        [
+          52,
+          "        input.addEventListener(\"input\", () => this.emit(eventPrefix + \":input\", { id: el.id, value: input.value }));"
+        ],
+        [
+          53,
+          "        input.addEventListener(\"change\", () => this.emit(eventPrefix + \":change\", { id: el.id, value: input.value }));"
+        ],
+        [
+          54,
+          "        return;"
+        ],
+        [
+          55,
+          "      }"
+        ],
+        [
+          56,
+          "      if (name === \"bottom_sheet\") {"
+        ],
+        [
+          57,
+          "        el.querySelectorAll(\"[data-roya-sheet-dismiss]\").forEach((button) => button.addEventListener(\"click\", () => {"
+        ],
+        [
+          58,
+          "          const isBackdrop = button.classList.contains(\"roya-bottom-sheet__backdrop\");"
+        ],
+        [
+          59,
+          "          const canClose = el.dataset.dismissible !== \"false\" && (!isBackdrop || el.dataset.closeOnBackdrop !== \"false\");"
+        ],
+        [
+          60,
+          "          if (canClose) {"
+        ],
+        [
+          61,
+          "            el.classList.remove(\"is-open\"); el.hidden = true;"
+        ],
+        [
+          62,
+          "            this.emit(\"bottom-sheet:close\", { id: el.id });"
+        ],
+        [
+          63,
+          "          }"
+        ],
+        [
+          64,
+          "        }));"
+        ],
+        [
+          65,
+          "        if (!el.hidden) requestAnimationFrame(() => el.classList.add(\"is-open\"));"
+        ],
+        [
+          66,
+          "        return;"
+        ],
+        [
+          67,
+          "      }"
+        ],
+        [
+          68,
+          "      if (name === \"virtual_list\") this.mountVirtualList(el);"
+        ],
+        [
+          69,
+          "    },"
+        ],
+        [
+          70,
+          ""
+        ],
+        [
+          71,
+          "    mountVirtualList(el) {"
+        ],
+        [
+          72,
+          "      const viewport = el.querySelector(\".roya-virtual-list__viewport\");"
+        ],
+        [
+          73,
+          "      const windowEl = el.querySelector(\".roya-virtual-list__window\");"
+        ],
+        [
+          74,
+          "      const spacer = el.querySelector(\".roya-virtual-list__spacer\");"
+        ],
+        [
+          75,
+          "      if (!viewport || !windowEl || !spacer) return;"
+        ],
+        [
+          76,
+          "      const items = JSON.parse(el.dataset.items || \"[]\");"
+        ],
+        [
+          77,
+          "      const rowHeight = Math.max(1, Number(el.dataset.itemHeight) || 48);"
+        ],
+        [
+          78,
+          "      const overscan = Math.max(0, Number(el.dataset.overscan) || 0);"
+        ],
+        [
+          79,
+          "      spacer.style.height = (items.length * rowHeight) + \"px\";"
+        ],
+        [
+          80,
+          "      let scheduled = false;"
+        ],
+        [
+          81,
+          "      const render = () => {"
+        ],
+        [
+          82,
+          "        scheduled = false;"
+        ],
+        [
+          83,
+          "        const first = Math.max(0, Math.floor(viewport.scrollTop / rowHeight) - overscan);"
+        ],
+        [
+          84,
+          "        const visible = Math.ceil(viewport.clientHeight / rowHeight) + overscan * 2;"
+        ],
+        [
+          85,
+          "        const last = Math.min(items.length, first + visible);"
+        ],
+        [
+          86,
+          "        windowEl.style.transform = `translateY(${first * rowHeight}px)`;"
+        ],
+        [
+          87,
+          "        const fragment = document.createDocumentFragment();"
+        ],
+        [
+          88,
+          "        for (let index = first; index < last; index += 1) {"
+        ],
+        [
+          89,
+          "          const row = document.createElement(\"div\");"
+        ],
+        [
+          90,
+          "          row.className = \"roya-virtual-list__item\";"
+        ],
+        [
+          91,
+          "          row.style.height = rowHeight + \"px\";"
+        ],
+        [
+          92,
+          "          row.setAttribute(\"role\", \"listitem\");"
+        ],
+        [
+          93,
+          "          row.setAttribute(\"aria-posinset\", String(index + 1));"
+        ],
+        [
+          94,
+          "          row.setAttribute(\"aria-setsize\", String(items.length));"
+        ],
+        [
+          95,
+          "          row.textContent = items[index];"
+        ],
+        [
+          96,
+          "          row.addEventListener(\"click\", () => this.emit(\"virtual-list:item-click\", {"
+        ],
+        [
+          97,
+          "            id: el.id, index, value: items[index]"
+        ],
+        [
+          98,
+          "          }));"
+        ],
+        [
+          99,
+          "          fragment.appendChild(row);"
+        ],
+        [
+          100,
+          "        }"
+        ],
+        [
+          101,
+          "        windowEl.replaceChildren(fragment);"
+        ],
+        [
+          102,
+          "      };"
+        ],
+        [
+          103,
+          "      viewport.addEventListener(\"scroll\", () => {"
+        ],
+        [
+          104,
+          "        if (!scheduled) { scheduled = true; requestAnimationFrame(render); }"
+        ],
+        [
+          105,
+          "      }, { passive: true });"
+        ],
+        [
+          106,
+          "      render();"
+        ],
+        [
+          107,
+          "    },"
+        ],
+        [
+          108,
+          "  };"
+        ],
+        [
+          109,
+          ""
+        ],
+        [
+          110,
+          "  Roya.behaviors = {"
+        ],
+        [
+          111,
+          "    ripple(el) {"
+        ],
+        [
+          112,
+          "      el.addEventListener(\"pointerdown\", (e) => {"
+        ],
+        [
+          113,
+          "        const rect = el.getBoundingClientRect();"
+        ],
+        [
+          114,
+          "        const span = document.createElement(\"span\");"
+        ],
+        [
+          115,
+          "        const size = Math.max(rect.width, rect.height) * 2;"
+        ],
+        [
+          116,
+          "        span.style.cssText ="
+        ],
+        [
+          117,
+          "          `position:absolute;border-radius:50%;pointer-events:none;` +"
+        ],
+        [
+          118,
+          "          `width:${size}px;height:${size}px;` +"
+        ],
+        [
+          119,
+          "          `left:${e.clientX - rect.left - size / 2}px;` +"
+        ],
+        [
+          120,
+          "          `top:${e.clientY - rect.top - size / 2}px;` +"
+        ],
+        [
+          121,
+          "          `background:currentColor;opacity:.25;` +"
+        ],
+        [
+          122,
+          "          `transform:scale(0);transition:transform .4s ease-out,opacity .4s ease-out;`;"
+        ],
+        [
+          123,
+          "        el.appendChild(span);"
+        ],
+        [
+          124,
+          "        requestAnimationFrame(() => {"
+        ],
+        [
+          125,
+          "          span.style.transform = \"scale(1)\";"
+        ],
+        [
+          126,
+          "          span.style.opacity = \"0\";"
+        ],
+        [
+          127,
+          "        });"
+        ],
+        [
+          128,
+          "        setTimeout(() => span.remove(), 450);"
+        ],
+        [
+          129,
+          "      });"
+        ],
+        [
+          130,
+          "    },"
+        ],
+        [
+          131,
+          "    hover(el) {"
+        ],
+        [
+          132,
+          "      el.addEventListener(\"pointerenter\", () => {"
+        ],
+        [
+          133,
+          "        el.dataset.hovering = \"true\";"
+        ],
+        [
+          134,
+          "        Roya.emit(\"hover:enter\", { target: el.id });"
+        ],
+        [
+          135,
+          "      });"
+        ],
+        [
+          136,
+          "      el.addEventListener(\"pointerleave\", () => {"
+        ],
+        [
+          137,
+          "        delete el.dataset.hovering;"
+        ],
+        [
+          138,
+          "        Roya.emit(\"hover:leave\", { target: el.id });"
+        ],
+        [
+          139,
+          "      });"
+        ],
+        [
+          140,
+          "    },"
+        ],
+        [
+          141,
+          "    focusRing(el) {"
+        ],
+        [
+          142,
+          "      el.addEventListener(\"focus\", () => Roya.emit(\"focus:enter\", { target: el.id }));"
+        ],
+        [
+          143,
+          "      el.addEventListener(\"blur\", () => Roya.emit(\"focus:leave\", { target: el.id }));"
+        ],
+        [
+          144,
+          "    },"
+        ],
+        [
+          145,
+          "  };"
+        ],
+        [
+          146,
+          ""
+        ],
+        [
+          147,
+          "  if (typeof document !== \"undefined\") {"
+        ],
+        [
+          148,
+          "    if (document.readyState === \"loading\") {"
+        ],
+        [
+          149,
+          "      document.addEventListener(\"DOMContentLoaded\", () => Roya.mount());"
+        ],
+        [
+          150,
+          "    } else {"
+        ],
+        [
+          151,
+          "      Roya.mount();"
+        ],
+        [
+          152,
+          "    }"
+        ],
+        [
+          153,
+          "  }"
+        ],
+        [
+          154,
+          ""
+        ],
+        [
+          155,
+          "  global.Roya = Roya;"
+        ],
+        [
+          156,
+          "})(window);"
+        ],
+        [
+          157,
+          ""
+        ],
+        [
+          158,
+          ""
+        ],
+        [
+          159,
+          "/* Roya component interaction layer. Delegated native events work for mouse,"
+        ],
+        [
+          160,
+          "   touch, pen and keyboard; all controls remain usable without a pointer. */"
+        ],
+        [
+          161,
+          "(function (global) {"
+        ],
+        [
+          162,
+          "  \"use strict\";"
+        ],
+        [
+          163,
+          "  const R = global.Roya;"
+        ],
+        [
+          164,
+          "  if (!R || R.__interactionLayer) return;"
+        ],
+        [
+          165,
+          "  R.__interactionLayer = true;"
+        ],
+        [
+          166,
+          ""
+        ],
+        [
+          167,
+          "  const emit = (name, type, detail) => R.emit(type, Object.assign({ id: name.id }, detail || {}));"
+        ],
+        [
+          168,
+          "  const closest = (el, selector, root) => {"
+        ],
+        [
+          169,
+          "    const node = el.closest(selector);"
+        ],
+        [
+          170,
+          "    return node && root.contains(node) ? node : null;"
+        ],
+        [
+          171,
+          "  };"
+        ],
+        [
+          172,
+          "  const setActive = (nodes, active, className) => nodes.forEach((node) => {"
+        ],
+        [
+          173,
+          "    const yes = node === active;"
+        ],
+        [
+          174,
+          "    node.classList.toggle(className || \"is-active\", yes);"
+        ],
+        [
+          175,
+          "    if (node.hasAttribute(\"aria-selected\")) node.setAttribute(\"aria-selected\", String(yes));"
+        ],
+        [
+          176,
+          "    if (node.hasAttribute(\"aria-current\")) {"
+        ],
+        [
+          177,
+          "      if (yes) node.setAttribute(\"aria-current\", \"page\");"
+        ],
+        [
+          178,
+          "      else node.removeAttribute(\"aria-current\");"
+        ],
+        [
+          179,
+          "    }"
+        ],
+        [
+          180,
+          "  });"
+        ],
+        [
+          181,
+          ""
+        ],
+        [
+          182,
+          "  const oldMount = R.mountBuiltin.bind(R);"
+        ],
+        [
+          183,
+          "  R.mountBuiltin = function (name, el) {"
+        ],
+        [
+          184,
+          "    oldMount(name, el);"
+        ],
+        [
+          185,
+          "    const q = (s) => el.querySelector(s);"
+        ],
+        [
+          186,
+          "    const all = (s) => Array.from(el.querySelectorAll(s));"
+        ],
+        [
+          187,
+          ""
+        ],
+        [
+          188,
+          "    if (name === \"button\" || name === \"fab\" || name === \"icon_button\") {"
+        ],
+        [
+          189,
+          "      const button = q(\"button\");"
+        ],
+        [
+          190,
+          "      if (button) {"
+        ],
+        [
+          191,
+          "        if (R.behaviors && R.behaviors.ripple) R.behaviors.ripple(button);"
+        ],
+        [
+          192,
+          "        button.addEventListener(\"click\", () => {"
+        ],
+        [
+          193,
+          "        if (name === \"icon_button\") {"
+        ],
+        [
+          194,
+          "          const selected = button.getAttribute(\"aria-pressed\") !== \"true\";"
+        ],
+        [
+          195,
+          "          button.setAttribute(\"aria-pressed\", String(selected));"
+        ],
+        [
+          196,
+          "          emit(el, \"icon_button:toggle\", { selected });"
+        ],
+        [
+          197,
+          "        }"
+        ],
+        [
+          198,
+          "        emit(el, name === \"button\" ? \"button:click\" : name === \"fab\" ? \"fab:click\" : \"icon_button:click\");"
+        ],
+        [
+          199,
+          "        });"
+        ],
+        [
+          200,
+          "      }"
+        ],
+        [
+          201,
+          "    }"
+        ],
+        [
+          202,
+          ""
+        ],
+        [
+          203,
+          "    if (name === \"checkbox\") {"
+        ],
+        [
+          204,
+          "      const input = q('input[type=\"checkbox\"]');"
+        ],
+        [
+          205,
+          "      if (input) {"
+        ],
+        [
+          206,
+          "        if (input.dataset.indeterminate === \"true\") input.indeterminate = true;"
+        ],
+        [
+          207,
+          "        input.addEventListener(\"change\", () => {"
+        ],
+        [
+          208,
+          "        emit(el, \"change\", { checked: input.checked, value: input.value });"
+        ],
+        [
+          209,
+          "        emit(el, input.checked ? \"check\" : \"uncheck\", { checked: input.checked });"
+        ],
+        [
+          210,
+          "        });"
+        ],
+        [
+          211,
+          "      }"
+        ],
+        [
+          212,
+          "    }"
+        ],
+        [
+          213,
+          "    if (name === \"switch\") {"
+        ],
+        [
+          214,
+          "      const input = q('input[type=\"checkbox\"]');"
+        ],
+        [
+          215,
+          "      if (input) input.addEventListener(\"change\", () => {"
+        ],
+        [
+          216,
+          "        emit(el, \"switch:change\", { checked: input.checked, value: input.value });"
+        ],
+        [
+          217,
+          "        emit(el, input.checked ? \"switch:on\" : \"switch:off\", { checked: input.checked });"
+        ],
+        [
+          218,
+          "      });"
+        ],
+        [
+          219,
+          "    }"
+        ],
+        [
+          220,
+          "    if (name === \"radio_group\") {"
+        ],
+        [
+          221,
+          "      all('input[type=\"radio\"]').forEach((input) => input.addEventListener(\"change\", () => {"
+        ],
+        [
+          222,
+          "        if (input.checked) emit(el, \"radio:change\", { value: input.value });"
+        ],
+        [
+          223,
+          "      }));"
+        ],
+        [
+          224,
+          "    }"
+        ],
+        [
+          225,
+          "    if (name === \"select\") {"
+        ],
+        [
+          226,
+          "      const select = q(\"select\");"
+        ],
+        [
+          227,
+          "      if (select) select.addEventListener(\"change\", () => {"
+        ],
+        [
+          228,
+          "        const value = select.multiple ? Array.from(select.selectedOptions).map(o => o.value) : select.value;"
+        ],
+        [
+          229,
+          "        emit(el, \"select:change\", { value });"
+        ],
+        [
+          230,
+          "        emit(el, \"select:select\", { value });"
+        ],
+        [
+          231,
+          "      });"
+        ],
+        [
+          232,
+          "    }"
+        ],
+        [
+          233,
+          "    if (name === \"slider\") {"
+        ],
+        [
+          234,
+          "      const input = q('input[type=\"range\"]');"
+        ],
+        [
+          235,
+          "      if (input) {"
+        ],
+        [
+          236,
+          "        const output = q(\"[data-roya-slider-value]\");"
+        ],
+        [
+          237,
+          "        input.addEventListener(\"input\", () => {"
+        ],
+        [
+          238,
+          "          if (output) output.textContent = input.value;"
+        ],
+        [
+          239,
+          "          emit(el, \"input\", { value: Number(input.value) });"
+        ],
+        [
+          240,
+          "        });"
+        ],
+        [
+          241,
+          "        input.addEventListener(\"change\", () => emit(el, \"change\", { value: Number(input.value) }));"
+        ],
+        [
+          242,
+          "        input.addEventListener(\"pointerdown\", () => emit(el, \"slide:start\", { value: Number(input.value) }));"
+        ],
+        [
+          243,
+          "        [\"pointerup\", \"pointercancel\", \"blur\"].forEach(type => input.addEventListener(type, () => emit(el, \"slide:end\", { value: Number(input.value) })));"
+        ],
+        [
+          244,
+          "      }"
+        ],
+        [
+          245,
+          "    }"
+        ],
+        [
+          246,
+          "    if (name === \"tabs\") {"
+        ],
+        [
+          247,
+          "      const tabs = all('[role=\"tab\"], .roya-tab');"
+        ],
+        [
+          248,
+          "      const activate = (tab) => {"
+        ],
+        [
+          249,
+          "        setActive(tabs, tab, \"roya-tab--active\");"
+        ],
+        [
+          250,
+          "        tabs.forEach(t => t.setAttribute(\"aria-selected\", String(t === tab)));"
+        ],
+        [
+          251,
+          "        emit(el, \"tab:change\", { index: Number(tab.dataset.index || tabs.indexOf(tab)), label: tab.textContent.trim() });"
+        ],
+        [
+          252,
+          "        emit(el, \"tab:select\", { index: Number(tab.dataset.index || tabs.indexOf(tab)) });"
+        ],
+        [
+          253,
+          "      };"
+        ],
+        [
+          254,
+          "      tabs.forEach((tab, index) => {"
+        ],
+        [
+          255,
+          "        tab.setAttribute(\"tabindex\", tab.classList.contains(\"roya-tab--active\") ? \"0\" : \"-1\");"
+        ],
+        [
+          256,
+          "        tab.addEventListener(\"click\", () => activate(tab));"
+        ],
+        [
+          257,
+          "        tab.addEventListener(\"keydown\", (event) => {"
+        ],
+        [
+          258,
+          "          if (![\"ArrowRight\", \"ArrowLeft\", \"Home\", \"End\"].includes(event.key)) return;"
+        ],
+        [
+          259,
+          "          event.preventDefault();"
+        ],
+        [
+          260,
+          "          const next = event.key === \"Home\" ? 0 : event.key === \"End\" ? tabs.length - 1 :"
+        ],
+        [
+          261,
+          "            (index + (event.key === \"ArrowRight\" ? 1 : -1) + tabs.length) % tabs.length;"
+        ],
+        [
+          262,
+          "          tabs[next].focus(); activate(tabs[next]);"
+        ],
+        [
+          263,
+          "        });"
+        ],
+        [
+          264,
+          "      });"
+        ],
+        [
+          265,
+          "    }"
+        ],
+        [
+          266,
+          "    if (name === \"list\") {"
+        ],
+        [
+          267,
+          "      all(\"[data-roya-list-item]\").forEach((item, index) => {"
+        ],
+        [
+          268,
+          "        const activate = () => {"
+        ],
+        [
+          269,
+          "        if (el.dataset.selectable === \"true\") {"
+        ],
+        [
+          270,
+          "          if (el.dataset.selectionMode !== \"multiple\") all(\"[data-roya-list-item]\").forEach(n => n.classList.remove(\"is-selected\"));"
+        ],
+        [
+          271,
+          "          item.classList.toggle(\"is-selected\");"
+        ],
+        [
+          272,
+          "          emit(el, \"list:item-select\", { index, selected: item.classList.contains(\"is-selected\") });"
+        ],
+        [
+          273,
+          "          emit(el, \"list:change\", { index });"
+        ],
+        [
+          274,
+          "        }"
+        ],
+        [
+          275,
+          "        emit(el, \"list:item-click\", { index, value: item.dataset.value || item.textContent.trim() });"
+        ],
+        [
+          276,
+          "        };"
+        ],
+        [
+          277,
+          "        item.addEventListener(\"click\", activate);"
+        ],
+        [
+          278,
+          "        item.addEventListener(\"keydown\", event => {"
+        ],
+        [
+          279,
+          "          if (event.key === \"Enter\" || event.key === \" \") { event.preventDefault(); activate(); }"
+        ],
+        [
+          280,
+          "        });"
+        ],
+        [
+          281,
+          "      });"
+        ],
+        [
+          282,
+          "    }"
+        ],
+        [
+          283,
+          "    if (name === \"card\" && el.classList.contains(\"roya-card--clickable\")) {"
+        ],
+        [
+          284,
+          "      el.setAttribute(\"tabindex\", el.getAttribute(\"tabindex\") || \"0\");"
+        ],
+        [
+          285,
+          "      el.addEventListener(\"click\", () => emit(el, \"card:click\"));"
+        ],
+        [
+          286,
+          "      el.addEventListener(\"keydown\", e => { if (e.key === \"Enter\" || e.key === \" \") { e.preventDefault(); emit(el, \"card:click\"); } });"
+        ],
+        [
+          287,
+          "    }"
+        ],
+        [
+          288,
+          "    if (name === \"chip\" && el.dataset.clickable === \"true\") {"
+        ],
+        [
+          289,
+          "      el.addEventListener(\"click\", () => {"
+        ],
+        [
+          290,
+          "        const selected = !el.classList.contains(\"is-selected\");"
+        ],
+        [
+          291,
+          "        el.classList.toggle(\"is-selected\", selected);"
+        ],
+        [
+          292,
+          "        el.setAttribute(\"aria-pressed\", String(selected));"
+        ],
+        [
+          293,
+          "        emit(el, selected ? \"chip:select\" : \"chip:deselect\", { selected });"
+        ],
+        [
+          294,
+          "        emit(el, \"chip:click\", { selected });"
+        ],
+        [
+          295,
+          "      });"
+        ],
+        [
+          296,
+          "      el.addEventListener(\"keydown\", event => {"
+        ],
+        [
+          297,
+          "        if (event.key === \"Enter\" || event.key === \" \") { event.preventDefault(); el.click(); }"
+        ],
+        [
+          298,
+          "      });"
+        ],
+        [
+          299,
+          "    }"
+        ],
+        [
+          300,
+          "    if (name === \"navigation_bar\" || name === \"navigation_rail\") {"
+        ],
+        [
+          301,
+          "      const items = all(\"[data-roya-nav-item]\");"
+        ],
+        [
+          302,
+          "      items.forEach((item, index) => item.addEventListener(\"click\", () => {"
+        ],
+        [
+          303,
+          "        setActive(items, item);"
+        ],
+        [
+          304,
+          "        emit(el, \"navigation:change\", { index, value: item.dataset.value || item.textContent.trim() });"
+        ],
+        [
+          305,
+          "        emit(el, \"navigation:select\", { index, value: item.dataset.value || item.textContent.trim() });"
+        ],
+        [
+          306,
+          "      }));"
+        ],
+        [
+          307,
+          "    }"
+        ],
+        [
+          308,
+          "    if (name === \"navigation_drawer\") {"
+        ],
+        [
+          309,
+          "      const close = () => { el.hidden = true; emit(el, \"drawer:close\"); };"
+        ],
+        [
+          310,
+          "      all(\"[data-roya-drawer-close]\").forEach(b => b.addEventListener(\"click\", close));"
+        ],
+        [
+          311,
+          "      all(\"[data-roya-drawer-item]\").forEach((item, index) => item.addEventListener(\"click\", () => {"
+        ],
+        [
+          312,
+          "        all(\"[data-roya-drawer-item]\").forEach(n => n.classList.remove(\"is-active\"));"
+        ],
+        [
+          313,
+          "        item.classList.add(\"is-active\");"
+        ],
+        [
+          314,
+          "        emit(el, \"drawer:item-select\", { index, value: item.dataset.value || item.textContent.trim() });"
+        ],
+        [
+          315,
+          "        if (el.dataset.autoClose === \"true\") close();"
+        ],
+        [
+          316,
+          "      }));"
+        ],
+        [
+          317,
+          "      el.addEventListener(\"keydown\", event => { if (event.key === \"Escape\") close(); });"
+        ],
+        [
+          318,
+          "      if (el.dataset.open === \"true\") { el.hidden = false; emit(el, \"drawer:open\"); }"
+        ],
+        [
+          319,
+          "    }"
+        ],
+        [
+          320,
+          "    if (name === \"bottom_sheet\") {"
+        ],
+        [
+          321,
+          "      const panel = q(\".roya-bottom-sheet__panel\");"
+        ],
+        [
+          322,
+          "      const handle = q(\".roya-bottom-sheet__handle\");"
+        ],
+        [
+          323,
+          "      if (handle && panel) {"
+        ],
+        [
+          324,
+          "        let startY = null;"
+        ],
+        [
+          325,
+          "        handle.style.touchAction = \"none\";"
+        ],
+        [
+          326,
+          "        handle.addEventListener(\"pointerdown\", event => {"
+        ],
+        [
+          327,
+          "          startY = event.clientY;"
+        ],
+        [
+          328,
+          "          if (handle.setPointerCapture) handle.setPointerCapture(event.pointerId);"
+        ],
+        [
+          329,
+          "        });"
+        ],
+        [
+          330,
+          "        handle.addEventListener(\"pointerup\", event => {"
+        ],
+        [
+          331,
+          "          if (startY !== null && event.clientY - startY > 80 && el.dataset.dismissible !== \"false\") {"
+        ],
+        [
+          332,
+          "            el.classList.remove(\"is-open\");"
+        ],
+        [
+          333,
+          "            el.hidden = true;"
+        ],
+        [
+          334,
+          "            emit(el, \"bottom-sheet:close\", { reason: \"swipe\" });"
+        ],
+        [
+          335,
+          "          }"
+        ],
+        [
+          336,
+          "          startY = null;"
+        ],
+        [
+          337,
+          "        });"
+        ],
+        [
+          338,
+          "        handle.addEventListener(\"pointercancel\", () => { startY = null; });"
+        ],
+        [
+          339,
+          "      }"
+        ],
+        [
+          340,
+          "      el.addEventListener(\"keydown\", event => {"
+        ],
+        [
+          341,
+          "        if (event.key === \"Escape\" && el.dataset.dismissible !== \"false\" && el.dataset.closeOnEscape !== \"false\") {"
+        ],
+        [
+          342,
+          "          el.classList.remove(\"is-open\"); el.hidden = true;"
+        ],
+        [
+          343,
+          "        }"
+        ],
+        [
+          344,
+          "      });"
+        ],
+        [
+          345,
+          "    }"
+        ],
+        [
+          346,
+          "    if (name === \"dialog\") {"
+        ],
+        [
+          347,
+          "      const close = (reason) => {"
+        ],
+        [
+          348,
+          "        if (el.dataset.dismissible !== \"false\" && el.dataset.persistent !== \"true\" &&"
+        ],
+        [
+          349,
+          "            (reason !== \"outside\" || el.dataset.closeOnOutside !== \"false\")) {"
+        ],
+        [
+          350,
+          "          el.hidden = true; emit(el, \"dialog:close\");"
+        ],
+        [
+          351,
+          "        }"
+        ],
+        [
+          352,
+          "      };"
+        ],
+        [
+          353,
+          "      const backdrop = q(\".roya-dialog__backdrop\");"
+        ],
+        [
+          354,
+          "      if (backdrop) backdrop.addEventListener(\"click\", () => close(\"outside\"));"
+        ],
+        [
+          355,
+          "      all(\"[data-roya-dialog-close]\").forEach(button => button.addEventListener(\"click\", () => close(\"button\")));"
+        ],
+        [
+          356,
+          "      el.addEventListener(\"keydown\", e => { if (e.key === \"Escape\" && el.dataset.closeOnEscape !== \"false\") close(\"escape\"); });"
+        ],
+        [
+          357,
+          "      if (!el.hidden) { document.body.dataset.royaDialogOpen = \"true\"; }"
+        ],
+        [
+          358,
+          "      const observer = new MutationObserver(() => {"
+        ],
+        [
+          359,
+          "        if (el.hidden) delete document.body.dataset.royaDialogOpen;"
+        ],
+        [
+          360,
+          "        else document.body.dataset.royaDialogOpen = \"true\";"
+        ],
+        [
+          361,
+          "      });"
+        ],
+        [
+          362,
+          "      observer.observe(el, { attributes: true, attributeFilter: [\"hidden\"] });"
+        ],
+        [
+          363,
+          "    }"
+        ],
+        [
+          364,
+          "    if (name === \"appbar\") {"
+        ],
+        [
+          365,
+          "      const navBtn = q(\"[data-roya-appbar-nav]\");"
+        ],
+        [
+          366,
+          "      if (navBtn) {"
+        ],
+        [
+          367,
+          "        navBtn.addEventListener(\"click\", () => {"
+        ],
+        [
+          368,
+          "          const isOpen = el.dataset.menuOpen === \"true\";"
+        ],
+        [
+          369,
+          "          const next = !isOpen;"
+        ],
+        [
+          370,
+          "          el.dataset.menuOpen = String(next);"
+        ],
+        [
+          371,
+          "          emit(el, next ? \"appbar:menu-open\" : \"appbar:menu-close\", { icon: (navBtn.textContent || \"\").trim() });"
+        ],
+        [
+          372,
+          "          emit(el, \"appbar:action\", { action: \"nav\", open: next });"
+        ],
+        [
+          373,
+          "        });"
+        ],
+        [
+          374,
+          "      }"
+        ],
+        [
+          375,
+          "      all(\"[data-roya-appbar-action]\").forEach((btn) => {"
+        ],
+        [
+          376,
+          "        btn.addEventListener(\"click\", () => {"
+        ],
+        [
+          377,
+          "          emit(el, \"appbar:action\", { icon: btn.dataset.icon, action: btn.dataset.icon });"
+        ],
+        [
+          378,
+          "        });"
+        ],
+        [
+          379,
+          "      });"
+        ],
+        [
+          380,
+          "    }"
+        ],
+        [
+          381,
+          "    if (name === \"tooltip\") {"
+        ],
+        [
+          382,
+          "      const trigger = q(\"[data-roya-tooltip-trigger]\");"
+        ],
+        [
+          383,
+          "      if (trigger) {"
+        ],
+        [
+          384,
+          "        const show = () => { el.classList.add(\"is-visible\"); emit(el, \"tooltip:show\"); };"
+        ],
+        [
+          385,
+          "        const hide = () => { el.classList.remove(\"is-visible\"); emit(el, \"tooltip:hide\"); };"
+        ],
+        [
+          386,
+          "        if (el.dataset.trigger === \"click\") trigger.addEventListener(\"click\", () => el.classList.contains(\"is-visible\") ? hide() : show());"
+        ],
+        [
+          387,
+          "        else if (el.dataset.trigger === \"focus\") {"
+        ],
+        [
+          388,
+          "          trigger.addEventListener(\"focus\", show); trigger.addEventListener(\"blur\", hide);"
+        ],
+        [
+          389,
+          "        } else if (el.dataset.trigger !== \"manual\") {"
+        ],
+        [
+          390,
+          "          trigger.addEventListener(\"pointerenter\", show); trigger.addEventListener(\"pointerleave\", hide);"
+        ],
+        [
+          391,
+          "          trigger.addEventListener(\"focus\", show); trigger.addEventListener(\"blur\", hide);"
+        ],
+        [
+          392,
+          "          trigger.addEventListener(\"click\", () => el.classList.contains(\"is-visible\") ? hide() : show());"
+        ],
+        [
+          393,
+          "        }"
+        ],
+        [
+          394,
+          "      }"
+        ],
+        [
+          395,
+          "    }"
+        ],
+        [
+          396,
+          "  };"
+        ],
+        [
+          397,
+          ""
+        ],
+        [
+          398,
+          "  // Public helpers for controlled overlays. Can be called by application code."
+        ],
+        [
+          399,
+          "  R.open = function (id) {"
+        ],
+        [
+          400,
+          "    const el = document.getElementById(id);"
+        ],
+        [
+          401,
+          "    if (!el) return false;"
+        ],
+        [
+          402,
+          "    el.hidden = false;"
+        ],
+        [
+          403,
+          "    if (el.dataset.royaComponent === \"bottom_sheet\") requestAnimationFrame(() => el.classList.add(\"is-open\"));"
+        ],
+        [
+          404,
+          "    if (el.dataset.royaComponent === \"dialog\") document.body.dataset.royaDialogOpen = \"true\";"
+        ],
+        [
+          405,
+          "    R.emit((el.dataset.royaComponent || \"component\") + \":open\", { id });"
+        ],
+        [
+          406,
+          "    return true;"
+        ],
+        [
+          407,
+          "  };"
+        ],
+        [
+          408,
+          "  R.close = function (id) {"
+        ],
+        [
+          409,
+          "    const el = document.getElementById(id);"
+        ],
+        [
+          410,
+          "    if (!el) return false;"
+        ],
+        [
+          411,
+          "    el.classList.remove(\"is-open\");"
+        ],
+        [
+          412,
+          "    el.hidden = true;"
+        ],
+        [
+          413,
+          "    if (el.dataset.royaComponent === \"dialog\") delete document.body.dataset.royaDialogOpen;"
+        ],
+        [
+          414,
+          "    R.emit((el.dataset.royaComponent || \"component\") + \":close\", { id });"
+        ],
+        [
+          415,
+          "    return true;"
+        ],
+        [
+          416,
+          "  };"
+        ],
+        [
+          417,
+          "  document.addEventListener(\"click\", (event) => {"
+        ],
+        [
+          418,
+          "    const trigger = event.target.closest(\"[data-roya-open]\");"
+        ],
+        [
+          419,
+          "    if (trigger) {"
+        ],
+        [
+          420,
+          "      event.preventDefault();"
+        ],
+        [
+          421,
+          "      R.open(trigger.dataset.royaOpen);"
+        ],
+        [
+          422,
+          "    }"
+        ],
+        [
+          423,
+          "  });"
+        ],
+        [
+          424,
+          ""
+        ],
+        [
+          425,
+          "  // Mount components added after the initial page load (HTMX, partial updates, etc.)."
+        ],
+        [
+          426,
+          "  if (global.MutationObserver && document.body) {"
+        ],
+        [
+          427,
+          "    const observer = new MutationObserver(records => records.forEach(record =>"
+        ],
+        [
+          428,
+          "      record.addedNodes.forEach(node => {"
+        ],
+        [
+          429,
+          "        if (node.nodeType === 1) {"
+        ],
+        [
+          430,
+          "          if (node.matches && node.matches(\"[data-roya-component]\")) R.mount(node.parentNode || document);"
+        ],
+        [
+          431,
+          "          else R.mount(node);"
+        ],
+        [
+          432,
+          "        }"
+        ],
+        [
+          433,
+          "      })"
+        ],
+        [
+          434,
+          "    ));"
+        ],
+        [
+          435,
+          "    observer.observe(document.body, { childList: true, subtree: true });"
+        ],
+        [
+          436,
+          "  }"
+        ],
+        [
+          437,
+          "})(window);"
+        ]
+      ]
+    },
+    "roya/templatetags/roya.py": {
+      "path": "roya/templatetags/roya.py",
+      "exists": true,
+      "size_bytes": 831,
+      "sha256": "8714f5a6431cffdac383d21a43bae530c17a2a761604cb3b9425a21b43637089",
+      "line_count": 32,
+      "lines": [
+        [
+          1,
+          "\"\"\"Django template tags for rendering Roya components.\"\"\""
+        ],
+        [
+          2,
+          "import logging"
+        ],
+        [
+          3,
+          ""
+        ],
+        [
+          4,
+          "from django import template"
+        ],
+        [
+          5,
+          "from django.utils.safestring import mark_safe"
+        ],
+        [
+          6,
+          ""
+        ],
+        [
+          7,
+          "from roya.core.registry import registry"
+        ],
+        [
+          8,
+          ""
+        ],
+        [
+          9,
+          "logger = logging.getLogger(\"roya.templatetags\")"
+        ],
+        [
+          10,
+          ""
+        ],
+        [
+          11,
+          "register = template.Library()"
+        ],
+        [
+          12,
+          ""
+        ],
+        [
+          13,
+          ""
+        ],
+        [
+          14,
+          "@register.simple_tag(takes_context=True)"
+        ],
+        [
+          15,
+          "def roya_component(context, name: str, **kwargs):"
+        ],
+        [
+          16,
+          "    \"\"\"Render a Roya component by name from the registry.\"\"\""
+        ],
+        [
+          17,
+          "    cls = registry.get(name)"
+        ],
+        [
+          18,
+          "    instance = cls(**kwargs)"
+        ],
+        [
+          19,
+          "    instance.mount()"
+        ],
+        [
+          20,
+          "    return mark_safe(instance.render())"
+        ],
+        [
+          21,
+          ""
+        ],
+        [
+          22,
+          ""
+        ],
+        [
+          23,
+          "@register.filter"
+        ],
+        [
+          24,
+          "def roya_class(component, extra: str = \"\"):"
+        ],
+        [
+          25,
+          "    base = getattr(component, \"class_name\", \"\") or \"\""
+        ],
+        [
+          26,
+          "    return f\"{base} {extra}\".strip()"
+        ],
+        [
+          27,
+          ""
+        ],
+        [
+          28,
+          ""
+        ],
+        [
+          29,
+          "@register.filter"
+        ],
+        [
+          30,
+          "def roya_token(name: str):"
+        ],
+        [
+          31,
+          "    from roya.theme.manager import theme_manager"
+        ],
+        [
+          32,
+          "    return theme_manager.get_token(name)"
+        ]
+      ]
+    }
+  },
+  "missing_expected_paths": [
+    "roya/apps.py"
+  ],
+  "fallback_candidates_by_filename": {
+    "apps.py": [
+      {
+        "path": "apps.py",
+        "size_bytes": 539
+      },
+      {
+        "path": "demo_app/apps.py",
+        "size_bytes": 153
+      },
+      {
+        "path": "royaapp/apps.py",
+        "size_bytes": 152
+      }
+    ],
+    "button.py": [
+      {
+        "path": "roya/components/actions/button.py",
+        "size_bytes": 2229
+      }
+    ],
+    "component.py": [
+      {
+        "path": "roya/core/component.py",
+        "size_bytes": 5678
+      }
+    ],
+    "roya.js": [
+      {
+        "path": "roya/static/roya/js/roya.js",
+        "size_bytes": 19815
+      }
+    ],
+    "roya.py": [
+      {
+        "path": "roya/templatetags/roya.py",
+        "size_bytes": 831
+      },
+      {
+        "path": "templatetags/roya.py",
+        "size_bytes": 2419
+      }
+    ]
+  },
+  "root_entries": [
+    {
+      "name": ".editorconfig",
+      "kind": "file"
+    },
+    {
+      "name": ".git",
+      "kind": "directory"
+    },
+    {
+      "name": ".github",
+      "kind": "directory"
+    },
+    {
+      "name": ".gitignore",
+      "kind": "file"
+    },
+    {
+      "name": ".idea",
+      "kind": "directory"
+    },
+    {
+      "name": ".pre-commit-config.yaml",
+      "kind": "file"
+    },
+    {
+      "name": ".pytest_cache",
+      "kind": "directory"
+    },
+    {
+      "name": ".venv",
+      "kind": "directory"
+    },
+    {
+      "name": "__init__.py",
+      "kind": "file"
+    },
+    {
+      "name": "__pycache__",
+      "kind": "directory"
+    },
+    {
+      "name": "apps.py",
+      "kind": "file"
+    },
+    {
+      "name": "CHANGELOG.md",
+      "kind": "file"
+    },
+    {
+      "name": "CODE_OF_CONDUCT.md",
+      "kind": "file"
+    },
+    {
+      "name": "CONTRIBUTING.md",
+      "kind": "file"
+    },
+    {
+      "name": "db.sqlite3",
+      "kind": "file"
+    },
+    {
+      "name": "demo.html",
+      "kind": "file"
+    },
+    {
+      "name": "demo.py",
+      "kind": "file"
+    },
+    {
+      "name": "demo_app",
+      "kind": "directory"
+    },
+    {
+      "name": "errors.json",
+      "kind": "file"
+    },
+    {
+      "name": "executed_commands.json",
+      "kind": "file"
+    },
+    {
+      "name": "file_reader.json",
+      "kind": "file"
+    },
+    {
+      "name": "init.bat",
+      "kind": "file"
+    },
+    {
+      "name": "init_output.log",
+      "kind": "file"
+    },
+    {
+      "name": "manage.py",
+      "kind": "file"
+    },
+    {
+      "name": "MANIFEST.in",
+      "kind": "file"
+    },
+    {
+      "name": "migrate_to_roya.py",
+      "kind": "file"
+    },
+    {
+      "name": "pyproject.toml",
+      "kind": "file"
+    },
+    {
+      "name": "README.md",
+      "kind": "file"
+    },
+    {
+      "name": "requirements.txt",
+      "kind": "file"
+    },
+    {
+      "name": "roya",
+      "kind": "directory"
+    },
+    {
+      "name": "roya.egg-info",
+      "kind": "directory"
+    },
+    {
+      "name": "roya_diagnostic.py",
+      "kind": "file"
+    },
+    {
+      "name": "roya_docs.py",
+      "kind": "file"
+    },
+    {
+      "name": "royaapp",
+      "kind": "directory"
+    },
+    {
+      "name": "royaproject",
+      "kind": "directory"
+    },
+    {
+      "name": "swifthub",
+      "kind": "directory"
+    },
+    {
+      "name": "templatetags",
+      "kind": "directory"
+    },
+    {
+      "name": "tests",
+      "kind": "directory"
+    },
+    {
+      "name": "UPGRADE_0.2.0.md",
+      "kind": "file"
+    }
+  ],
+  "notes": [
+    "Only the explicitly listed source/configuration files are extracted.",
+    "Virtual environments, Git metadata, node_modules, build and cache folders are excluded.",
+    "No environment variables, credentials, database files, or user data are collected.",
+    "If a target is missing at its expected path, inspect fallback_candidates_by_filename."
+  ]
+}
